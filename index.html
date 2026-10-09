@@ -107,67 +107,27 @@
             display: block;
         }
 
-        .badge-kidem {
-            background: rgba(212, 175, 55, 0.12);
-            border: 1px solid var(--border-color);
-            color: var(--gold-primary);
-            padding: 6px 14px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .badge-kidem::before {
-            content: '';
-            width: 7px;
-            height: 7px;
-            background-color: var(--gold-primary);
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 10px var(--gold-primary);
-        }
-
         /* Ana Gövde */
         .main-container {
             flex: 1;
-            max-width: 980px;
+            max-width: 920px;
             width: 100%;
             margin: 0 auto;
-            padding: 60px 24px 80px;
+            padding: 40px 20px 60px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
         }
 
-        .hero-badge {
-            background: var(--danger-bg);
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            color: #fca5a5;
-            padding: 8px 18px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 24px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
         .hero-title {
             font-family: 'Cinzel', serif;
-            font-size: clamp(32px, 5vw, 50px);
-            font-weight: 900;
+            font-size: clamp(28px, 4.5vw, 42px);
+            font-weight: 800;
             color: #ffffff;
-            line-height: 1.25;
-            margin-bottom: 20px;
-            max-width: 860px;
+            line-height: 1.3;
+            margin-bottom: 14px;
+            max-width: 780px;
             text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
         }
 
@@ -178,10 +138,10 @@
         }
 
         .hero-subtitle {
-            font-size: clamp(16px, 2vw, 18px);
+            font-size: clamp(15px, 1.8vw, 17px);
             color: var(--text-muted);
-            max-width: 720px;
-            margin-bottom: 40px;
+            max-width: 660px;
+            margin-bottom: 32px;
             font-weight: 400;
         }
 
@@ -248,32 +208,14 @@
             text-transform: uppercase;
         }
 
-        .live-status {
-            font-size: 12px;
-            color: #4ade80;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .live-status::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background-color: #4ade80;
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 10px #4ade80;
-        }
-
         .crisis-textarea {
             width: 100%;
-            min-height: 140px;
+            min-height: 130px;
             background: rgba(10, 13, 20, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 12px;
-            padding: 18px 20px;
-            font-size: 16px;
+            padding: 16px 18px;
+            font-size: 15px;
             color: #ffffff;
             font-family: inherit;
             resize: vertical;
@@ -292,20 +234,20 @@
         }
 
         .card-footer {
-            margin-top: 20px;
+            margin-top: 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 14px;
         }
 
-        .protection-note {
-            font-size: 13px;
+        .ai-disclaimer-note {
+            font-size: 12px;
             color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            line-height: 1.45;
+            flex: 1;
+            min-width: 220px;
         }
 
         .submit-btn {
@@ -469,48 +411,11 @@
             font-weight: 500;
         }
 
-        /* Savunma ve Mevzuat Bilgi Kartları */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            width: 100%;
-            margin-top: 60px;
-            text-align: left;
-        }
-
-        .feature-box {
-            background: rgba(17, 23, 38, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 24px;
-            border-radius: 16px;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .feature-box:hover {
-            border-color: var(--border-color);
-            transform: translateY(-3px);
-        }
-
-        .feature-box h3 {
-            font-size: 16px;
-            color: var(--gold-light);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .feature-box p {
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
         /* Yasal Sorumluluk Reddi (Disclaimer) */
         .footer {
             background: #06080d;
             border-top: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 40px 24px;
+            padding: 28px 20px;
             margin-top: auto;
         }
 
@@ -617,27 +522,17 @@
                 <span>Ağır Ceza & Anayasal Savunma Portalı</span>
             </div>
         </a>
-        <div class="badge-kidem">
-            50 Yıllık Kürsü ve Ağır Ceza Tecrübesi
-        </div>
     </header>
 
     <!-- Ana Ekran / Karşılama ve Müdahale Merkezi -->
     <main class="main-container">
 
-        <div class="hero-badge">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-            </svg>
-            Acil Adli Müdahale Hattı
-        </div>
-
         <h2 class="hero-title">
-            Hukuk Kalkanı: Haklarınızı <span>Sokakta, Karakolda ve Adliyede</span> Koruyun
+            Haklarınızı Bilin, <span>Yalnız Değilsiniz</span>
         </h2>
 
         <p class="hero-subtitle">
-            Hukuka aykırı aramalara, keyfi durdurmalara, baskı altında ifade alma girişimlerine ve usulsüz tutanaklara karşı Türk Ceza Kanunu ve Ceza Muhakemesi Kanunu güvencesiyle anında yanınızdayız.
+            Hukuka aykırı aramalara, keyfi durdurmalara ve baskı altında ifadelere karşı anında hukuki yol haritası.
         </p>
 
         <!-- Hızlı Durum Seçenekleri -->
@@ -659,8 +554,7 @@
         <!-- Soru Sorma Kartı -->
         <div class="crisis-card">
             <div class="card-label">
-                <span>Hukuki Krizinizi veya Durumunuzu Açıklayın</span>
-                <div class="live-status">Saha Savunma Modu Aktif</div>
+                <span>Karşılaştığınız Durumu Açıklayın</span>
             </div>
 
             <textarea 
@@ -670,18 +564,15 @@
             ></textarea>
 
             <div class="card-footer">
-                <div class="protection-note">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--gold-primary)">
-                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-                    </svg>
-                    Anayasa m. 36 Hak Arama Hürriyeti Kapsamında Koruma
+                <div class="ai-disclaimer-note">
+                    ℹ️ Yanıtlar yapay zekâ tabanlı hukuki danışman tarafından üretilir; resmi vekâlet ilişkisi kurmaz ve avukat yardımı yerine geçmez.
                 </div>
 
                 <button class="submit-btn" id="askBtn" onclick="handleConsultation()">
                     <svg viewBox="0 0 24 24">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
                     </svg>
-                    Avukata Sor
+                    Hukuki Yol Haritası Al
                 </button>
             </div>
         </div>
@@ -689,7 +580,7 @@
         <!-- Yükleniyor Bildirimi -->
         <div class="loading-box" id="loadingBox">
             <div class="spinner"></div>
-            <div class="loading-text">Avukatınız kanun maddelerini ve vakanızı inceliyor... Hukuki kalkan hazırlanıyor.</div>
+            <div class="loading-text">Mevzuat maddeleri ve vakanız inceleniyor... Hukuki yol haritası hazırlanıyor.</div>
         </div>
 
         <!-- Canlı Savunma ve Rapor Yanıt Kartı -->
@@ -699,29 +590,13 @@
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--gold-primary)">
                         <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
                     </svg>
-                    <h3>Ağır Ceza Avukatı Müdahale Raporu</h3>
+                    <h3>Hukuki Değerlendirme ve Yol Haritası</h3>
                 </div>
                 <button class="copy-btn" onclick="copyResponse()">
                     📋 Metni ve Dilekçeyi Kopyala
                 </button>
             </div>
             <div class="response-content" id="responseContent"></div>
-        </div>
-
-        <!-- Savunma Temelleri -->
-        <div class="features-grid">
-            <div class="feature-box">
-                <h3>🏛️ TCK & CMK Hakimiyeti</h3>
-                <p>5271 sayılı Ceza Muhakemesi Kanunu ve 5237 sayılı Türk Ceza Kanunu kapsamında tavizsiz savunma refleksi ve delil güvencesi.</p>
-            </div>
-            <div class="feature-box">
-                <h3>📑 Anında Şerh ve Dilekçe</h3>
-                <p>Kolluk tutanaklarına anında düşülecek el yazısı şerhler ve Cumhuriyet Başsavcılığı'na doğrudan verilecek tam dilekçe metinleri.</p>
-            </div>
-            <div class="feature-box">
-                <h3>🗣️ Birebir Savunma Replikleri</h3>
-                <p>Kriz anında paniğe kapılmadan, kolluk kuvvetlerine ve savcıya söylenecek tırnak içindeki kelimesi kelimesine sözlü itirazlar.</p>
-            </div>
         </div>
 
     </main>
@@ -731,35 +606,21 @@
         <div class="footer-inner">
             
             <div class="disclaimer-box">
-                <div class="disclaimer-title">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2L1 21h22L12 2zm1 14h-2v-2h2v2zm0-4h-2V8h2v4z"/>
-                    </svg>
-                    Yasal Uyarı ve Sorumluluk Reddi Beyanı (1136 Sayılı Avukatlık Kanunu m. 35)
-                </div>
                 <p class="disclaimer-text">
-                    İşbu platformda yer alan hukuki analizler, yönlendirmeler, örnek dilekçeler ve savunma replikleri; vatandaşlarımızın <strong>T.C. Anayasası m. 36</strong> ile güvence altına alınan hak arama hürriyetini bilinçli kullanabilmesi amacıyla sunulmuş genel hukuki bilgilendirme ve usul rehberliği mahiyetindedir. <strong>1136 sayılı Avukatlık Kanunu’nun 35. maddesi</strong> uyarınca, bu platform üzerinden kullanıcı ile sistem arasında resmi bir avukat-müvekkil ilişkisi, vekâlet akdi veya hukuki temsil bağı kurulmamaktadır. Somut davalarınızda, soruşturma ve kovuşturma işlemlerinizde hak kaybına uğramamanız adına fiilen baroya kayıtlı bağımsız bir avukatın doğrudan hukuki yardımından faydalanmanız önemle tavsiye olunur.
+                    <strong>Yasal Uyarı (1136 Sayılı Avukatlık Kanunu m. 35):</strong> Bu platform Anayasa m. 36 hak arama hürriyeti kapsamında genel bilgilendirme sağlar; resmi vekâlet bağı veya avukat-müvekkil ilişkisi kurmaz. Hak kaybına uğramamak adına fiilen bir avukatın doğrudan hukuki yardımından yararlanmanız tavsiye olunur.
                 </p>
             </div>
 
             <!-- Resmi Mevzuat Doğrulama Kaynakları -->
             <div class="official-sources">
-                <a href="https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=5271&MevzuatTur=1&MevzuatTertip=5" target="_blank" rel="noopener noreferrer">
-                    🔗 5271 Sayılı Ceza Muhakemesi Kanunu (CMK)
-                </a>
-                <a href="https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=5237&MevzuatTur=1&MevzuatTertip=5" target="_blank" rel="noopener noreferrer">
-                    🔗 5237 Sayılı Türk Ceza Kanunu (TCK)
-                </a>
-                <a href="https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=2559&MevzuatTur=1&MevzuatTertip=3" target="_blank" rel="noopener noreferrer">
-                    🔗 2559 Sayılı Polis Vazife ve Salâhiyet Kanunu (PVSK)
-                </a>
-                <a href="https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=1136&MevzuatTur=1&MevzuatTertip=5" target="_blank" rel="noopener noreferrer">
-                    🔗 1136 Sayılı Avukatlık Kanunu
-                </a>
+                <a href="https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=5271&MevzuatTur=1&MevzuatTertip=5" target="_blank" rel="noopener noreferrer">🔗 CMK</a>
+                <a href="https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=5237&MevzuatTur=1&MevzuatTertip=5" target="_blank" rel="noopener noreferrer">🔗 TCK</a>
+                <a href="https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=2559&MevzuatTur=1&MevzuatTertip=3" target="_blank" rel="noopener noreferrer">🔗 PVSK</a>
+                <a href="https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=1136&MevzuatTur=1&MevzuatTertip=5" target="_blank" rel="noopener noreferrer">🔗 Avukatlık Kanunu</a>
             </div>
 
             <div class="copyright">
-                © 2026 Hukuk Danışmanım | Tüm Hakları Saklıdır. Resmi Mevzuat Doğrulamalı Adli Savunma Portalı.
+                © 2026 Hukuk Danışmanım | Tüm Hakları Saklıdır.
             </div>
 
         </div>
