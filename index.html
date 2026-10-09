@@ -146,35 +146,6 @@
             font-weight: 400;
         }
 
-        /* Hızlı Kriz Butonları */
-        .quick-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 30px;
-            max-width: 820px;
-        }
-
-        .quick-btn {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #cbd5e1;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: inherit;
-        }
-
-        .quick-btn:hover {
-            background: rgba(212, 175, 55, 0.15);
-            border-color: var(--gold-primary);
-            color: var(--gold-light);
-            transform: translateY(-1px);
-        }
-
         /* Arama / Soru Formu Kartı */
         .crisis-card {
             width: 100%;
@@ -508,22 +479,6 @@
         <h2 class="hero-title">
             ÇARESİZ <span>DEĞİLSİNİZ</span>
         </h2>
-
-        <!-- Hızlı Durum Seçenekleri -->
-        <div class="quick-actions">
-            <button class="quick-btn" onclick="quickFill('Polisler yolda durdurdu, arama kararı olmaksızın üstümü ve aracımın bagajını aramak istiyorlar. Ne yapmalıyım?')">
-                🚨 Sokakta Usulsüz Arama
-            </button>
-            <button class="quick-btn" onclick="quickFill('Karakolda ifadem alınıyor. Önüme okumadığım bir tutanak koydular ve imzalamam için baskı yapıyorlar.')">
-                ⚖️ Karakolda Baskı Altında İfade
-            </button>
-            <button class="quick-btn" onclick="quickFill('Hakkımda gözaltı kararı verildiği söylendi. Avukat talep etme ve susma hakkımı nasıl kullanırım?')">
-                🔒 Gözaltı ve Müdafi Talebi
-            </button>
-            <button class="quick-btn" onclick="quickFill('Arama işlemi zorla yapıldı. Cumhuriyet Savcılığına verilmek üzere haksız arama şikayet dilekçesi hazırlamak istiyorum.')">
-                📝 Acil Savcılık Şikâyet Dilekçesi
-            </button>
-        </div>
 
         <!-- Soru Sorma Kartı -->
         <div class="crisis-card">
