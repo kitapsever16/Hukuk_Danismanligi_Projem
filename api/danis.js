@@ -52,35 +52,51 @@ module.exports = async function handler(req, res) {
             return res.status(400).json({ error: 'Lütfen incelenmek üzere hukuki durumunuzu belirtiniz.' });
         }
 
-        // Gemini REST API Çağrısı (Harici kütüphane gerektirmeyen en stabil bağlantı)
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                systemInstruction: {
-                    parts: [{ text: SYSTEM_PROMPT }]
-                },
-                contents: [
-                    {
-                        role: 'user',
-                        parts: [{ text: userMessage }]
-                    }
-                ],
-                generationConfig: {
-                    temperature: 0.3,
-                    maxOutputTokens: 2048
-                }
-            })
-        });
+        // Gemini REST API Çağrısı (Yüksek erişilebilirlik için çoklu model yedeği)
+        const candidateModels = ['gemini-3.8-flash', 'gemini-flash-latest', 'gemini-3.5-flash'];
+        let response = null;
+        let lastError = null;
 
-        if (!response.ok) {
-            const errorData = await response.text();
-            console.error('Gemini API Hatası:', errorData);
-            return res.status(response.status).json({ 
-                error: 'Hukuk kalkanı servisine bağlanırken bir aksaklık oluştu.',
-                details: errorData 
+        for (const model of candidateModels) {
+            try {
+                response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        systemInstruction: {
+                            parts: [{ text: SYSTEM_PROMPT }]
+                        },
+                        contents: [
+                            {
+                                role: 'user',
+                                parts: [{ text: userMessage }]
+                            }
+                        ],
+                        generationConfig: {
+                            temperature: 0.3,
+                            maxOutputTokens: 2048
+                        }
+                    })
+                });
+
+                if (response.ok) {
+                    break;
+                } else {
+                    lastError = await response.text();
+                    console.warn(`Model ${model} yanit vermedi (${response.status}), diger modele geciliyor...`);
+                }
+            } catch (err) {
+                lastError = err.message;
+            }
+        }
+
+        if (!response || !response.ok) {
+            console.error('Tum Gemini modelleri basarisiz:', lastError);
+            return res.status(503).json({ 
+                error: 'Hukuk kalkanı servisine bağlanırken geçici bir aksaklık oluştu. Lütfen tekrar deneyiniz.',
+                details: lastError 
             });
         }
 
