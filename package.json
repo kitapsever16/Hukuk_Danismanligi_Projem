@@ -1,0 +1,17 @@
+{
+  "name": "hukuk-danismanim",
+  "version": "1.0.0",
+  "description": "Hukuk Kalkanı - Ağır Ceza ve Anayasal Savunma Portalı",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "hukuk",
+    "savunma",
+    "cmk",
+    "tck"
+  ],
+  "author": "Hukuk Danışmanım",
+  "license": "ISC"
+}
