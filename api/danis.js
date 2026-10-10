@@ -16,6 +16,7 @@ ROLÜN VE KURALLARIN:
 8. Asla teknik/kod/yazılım terimleri konuşma; tamamen adli, vakur, koruyucu, cesaret verici, devrimci ve samimi bir hukuk dili kullan.
 9. Yanıtının en altına vatandaşın teyit edebilmesi için ilgili kanunun T.C. Mevzuat Bilgi Sistemi (mevzuat.gov.tr) doğrudan resmi bağlantısını kaynak olarak ekle.
 10. Metinlerinde asla '---', '***', '>*', '*' veya lüzumsuz işaretler kullanma. Başlıkları doğrudan '### 1. ADIM...' şeklinde yaz, maddeleri ve replikleri sade, temiz ve okunabilir bir Türkçe ile sun.
+11. Yanıtını ASLA yarıda bırakma veya kesme! Bütün adımları, tutanak şerhini, replikleri ve resmi mevzuat linkini sonuna kadar eksiksiz ve tam bir bütünlük içinde tamamla.
 `;
 
 module.exports = async function handler(req, res) {
@@ -55,7 +56,7 @@ module.exports = async function handler(req, res) {
         }
 
         // Gemini REST API Çağrısı (Yüksek erişilebilirlik için çoklu model yedeği)
-        const candidateModels = ['gemini-3.8-flash', 'gemini-flash-latest', 'gemini-3.5-flash'];
+        const candidateModels = ['gemini-flash-latest', 'gemini-3.8-flash', 'gemini-3.5-flash'];
         let response = null;
         let lastError = null;
 
@@ -78,7 +79,7 @@ module.exports = async function handler(req, res) {
                         ],
                         generationConfig: {
                             temperature: 0.3,
-                            maxOutputTokens: 2048
+                            maxOutputTokens: 8192
                         }
                     })
                 });
@@ -104,9 +105,13 @@ module.exports = async function handler(req, res) {
 
         const data = await response.json();
         const candidate = data.candidates && data.candidates[0];
-        const answerText = candidate && candidate.content && candidate.content.parts && candidate.content.parts[0] 
-            ? candidate.content.parts[0].text 
-            : 'Hukuki inceleme sonucu üretilemedi.';
+        let answerText = '';
+        if (candidate && candidate.content && Array.isArray(candidate.content.parts)) {
+            answerText = candidate.content.parts.map(p => p.text || '').join('');
+        }
+        if (!answerText) {
+            answerText = 'Hukuki inceleme sonucu üretilemedi.';
+        }
 
         return res.status(200).json({ answer: answerText });
 
