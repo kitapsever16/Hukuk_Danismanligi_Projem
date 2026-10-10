@@ -178,11 +178,11 @@
             background: linear-gradient(135deg, rgba(153, 27, 27, 0.5) 0%, rgba(69, 10, 10, 0.7) 100%);
             border: 1.5px solid rgba(250, 204, 21, 0.45);
             border-radius: 14px;
-            padding: 14px 20px;
+            padding: 14px 22px;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            justify-content: flex-start;
+            gap: 12px;
             color: #fef08a;
             font-family: inherit;
             font-size: 14.5px;
@@ -190,7 +190,7 @@
             cursor: pointer;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), inset 0 0 12px rgba(220, 38, 38, 0.15);
             transition: all 0.25s ease;
-            text-align: center;
+            text-align: left;
         }
 
         .emergency-btn:hover {
@@ -205,6 +205,7 @@
             font-size: 16px;
             color: #facc15;
             filter: drop-shadow(0 0 4px rgba(250, 204, 21, 0.6));
+            flex-shrink: 0;
         }
 
         /* Arama / Soru Formu Kartı */
@@ -420,7 +421,17 @@
             color: var(--gold-light);
         }
 
-        .response-content blockquote {
+        .response-step-title {
+            color: var(--gold-light);
+            font-size: 17px;
+            margin: 20px 0 10px;
+            font-weight: 700;
+            display: block;
+            border-bottom: 1px solid rgba(250, 204, 21, 0.2);
+            padding-bottom: 6px;
+        }
+
+        .response-quote, .response-content blockquote {
             border-left: 3px solid var(--gold-primary);
             background: rgba(220, 38, 38, 0.14);
             padding: 12px 18px;
@@ -568,11 +579,11 @@
         <!-- Acil Durum Hızlı Müdahale Butonları -->
         <div class="emergency-actions">
             <button class="emergency-btn" onclick="quickAsk('Evime polis baskını yapılırsa ne yapmalıyım? Arama kararı, girilme saati, avukat hakkım ve tutanak konusunda adım adım ne yapmam gerekir?')">
-                <span class="btn-icon">⚡</span>
+                <span class="btn-icon">★</span>
                 <span>Evime Polis Baskını Yapılırsa Ne Yapmalıyım?</span>
             </button>
             <button class="emergency-btn" onclick="quickAsk('Eylemde veya basın açıklamasında gözaltına alınırsam ne yapmalıyım? Yakalama anında, araçta, nezarethanede ve ifade aşamasında haklarım nelerdir?')">
-                <span class="btn-icon">⚡</span>
+                <span class="btn-icon">★</span>
                 <span>Eylemde Gözaltına Alınırsam Ne Yapmalıyım?</span>
             </button>
         </div>
@@ -706,18 +717,20 @@
 
         function formatLegalText(text) {
             if (!text) return '';
-            // Basit ve güvenli Markdown / Tırnak Biçimlendirme
+            // HTML karakterlerini kaçır
             let formatted = text
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
 
-            // Başlıklar ###
-            formatted = formatted.replace(/^### (.*$)/gim, '<h4 style="color:var(--gold-light); font-size:17px; margin:16px 0 8px;">$1</h4>');
-            // Kalın yazılar **...**
+            // 1. Tırnak içindeki replikler (HTML etiketleri eklenmeden ÖNCE dönüştürülür, etiketleri bozmaz)
+            formatted = formatted.replace(/"([^"\n]+)"/g, '<blockquote class="response-quote">"$1"</blockquote>');
+
+            // 2. Başlıklar ### veya ##
+            formatted = formatted.replace(/^###?\s+(.*$)/gim, '<h4 class="response-step-title">$1</h4>');
+
+            // 3. Kalın yazılar **...**
             formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            // Tırnak içindeki replikler
-            formatted = formatted.replace(/"(.*?)"/g, '<blockquote style="border-left:3px solid var(--gold-primary); background:rgba(220,38,38,0.14); padding:10px 14px; margin:10px 0; border-radius:0 8px 8px 0; color:#fef08a;">"$1"</blockquote>');
 
             return formatted;
         }
