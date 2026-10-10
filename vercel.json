@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/danis.js": {
+      "maxDuration": 60
+    }
+  }
+}
