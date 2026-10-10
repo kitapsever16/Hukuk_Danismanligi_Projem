@@ -162,6 +162,51 @@
             filter: drop-shadow(0 2px 10px rgba(250, 204, 21, 0.45));
         }
 
+        /* Acil Durum Hızlı Butonları */
+        .emergency-actions {
+            display: flex;
+            gap: 14px;
+            width: 100%;
+            margin-bottom: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .emergency-btn {
+            flex: 1;
+            min-width: 280px;
+            background: linear-gradient(135deg, rgba(153, 27, 27, 0.5) 0%, rgba(69, 10, 10, 0.7) 100%);
+            border: 1.5px solid rgba(250, 204, 21, 0.45);
+            border-radius: 14px;
+            padding: 14px 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #fef08a;
+            font-family: inherit;
+            font-size: 14.5px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), inset 0 0 12px rgba(220, 38, 38, 0.15);
+            transition: all 0.25s ease;
+            text-align: center;
+        }
+
+        .emergency-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, rgba(185, 28, 28, 0.75) 0%, rgba(127, 29, 29, 0.85) 100%);
+            border-color: #facc15;
+            color: #ffffff;
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.55), 0 0 15px rgba(250, 204, 21, 0.35);
+        }
+
+        .emergency-btn .btn-icon {
+            font-size: 16px;
+            color: #facc15;
+            filter: drop-shadow(0 0 4px rgba(250, 204, 21, 0.6));
+        }
+
         /* Arama / Soru Formu Kartı */
         .crisis-card {
             width: 100%;
@@ -520,6 +565,18 @@
             ÇARESİZ <span>DEĞİLSİNİZ</span>
         </h2>
 
+        <!-- Acil Durum Hızlı Müdahale Butonları -->
+        <div class="emergency-actions">
+            <button class="emergency-btn" onclick="quickAsk('Evime polis baskını yapılırsa ne yapmalıyım? Arama kararı, girilme saati, avukat hakkım ve tutanak konusunda adım adım ne yapmam gerekir?')">
+                <span class="btn-icon">⚡</span>
+                <span>Evime Polis Baskını Yapılırsa Ne Yapmalıyım?</span>
+            </button>
+            <button class="emergency-btn" onclick="quickAsk('Eylemde veya basın açıklamasında gözaltına alınırsam ne yapmalıyım? Yakalama anında, araçta, nezarethanede ve ifade aşamasında haklarım nelerdir?')">
+                <span class="btn-icon">⚡</span>
+                <span>Eylemde Gözaltına Alınırsam Ne Yapmalıyım?</span>
+            </button>
+        </div>
+
         <!-- Soru Sorma Kartı -->
         <div class="crisis-card">
             <div class="card-label">
@@ -592,6 +649,12 @@
             const textarea = document.getElementById('crisisInput');
             textarea.value = text;
             textarea.focus();
+        }
+
+        function quickAsk(text) {
+            const textarea = document.getElementById('crisisInput');
+            textarea.value = text;
+            handleConsultation();
         }
 
         async function handleConsultation() {
