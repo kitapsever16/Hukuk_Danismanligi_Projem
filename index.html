@@ -717,22 +717,44 @@
 
         function formatLegalText(text) {
             if (!text) return '';
-            // HTML karakterlerini kaçır
-            let formatted = text
+
+            let formatted = text;
+
+            // 1. Yatay çizgileri (---, ***, ___) tamamen kaldır
+            formatted = formatted.replace(/^\s*[-*_]{2,}\s*$/gm, '');
+
+            // 2. Alıntı ve liste işaretçilerini (> * "..." veya > "...") temizle
+            formatted = formatted.replace(/^\s*>\s*\*?\s*/gm, '');
+            formatted = formatted.replace(/"\s*\*+\s*$/gm, '"');
+
+            // 3. Madde başı yıldız ve tire işaretlerini (* ve -) temizle
+            formatted = formatted.replace(/^\s*[\*\-]\s+/gm, '');
+
+            // 4. Tek başına kalan sembol satırlarını (> *, *, - vb.) sil
+            formatted = formatted.replace(/^\s*[>*\-]+\s*$/gm, '');
+
+            // 5. Aşırı satır boşluklarını sadeleştir
+            formatted = formatted.replace(/\n{3,}/g, '\n\n');
+
+            // 6. HTML karakterlerini güvenle kaçır
+            formatted = formatted
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
 
-            // 1. Tırnak içindeki replikler (HTML etiketleri eklenmeden ÖNCE dönüştürülür, etiketleri bozmaz)
+            // 7. Tırnak içindeki replikleri şık alıntı kutusuna dönüştür
             formatted = formatted.replace(/"([^"\n]+)"/g, '<blockquote class="response-quote">"$1"</blockquote>');
 
-            // 2. Başlıklar ### veya ##
+            // 8. Başlıkları dönüştür (### veya ##)
             formatted = formatted.replace(/^###?\s+(.*$)/gim, '<h4 class="response-step-title">$1</h4>');
 
-            // 3. Kalın yazılar **...**
+            // 9. Kalın yazıları dönüştür (**...**)
             formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-            return formatted;
+            // 10. Kalan başıboş yıldız veya büyüktür işaretlerini temizle
+            formatted = formatted.replace(/^\s*[\*\>]\s*$/gm, '');
+
+            return formatted.trim();
         }
 
         function copyResponse() {
