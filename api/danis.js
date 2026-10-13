@@ -51,9 +51,33 @@ module.exports = async function handler(req, res) {
             }
         }
 
-        const userMessage = body && body.message ? body.message : '';
-        if (!userMessage.trim()) {
-            return res.status(400).json({ error: 'Lütfen incelenmek üzere hukuki durumunuzu belirtiniz.' });
+        let contents = [];
+        if (Array.isArray(body && body.messages) && body.messages.length > 0) {
+            for (const item of body.messages) {
+                const role = (item.role === 'assistant' || item.role === 'model') ? 'model' : 'user';
+                const text = (item.content || item.text || '').trim();
+                if (!text) continue;
+
+                // Gemini art arda ayni rolu kabul etmediginden pes pese gelenleri birlestir
+                if (contents.length > 0 && contents[contents.length - 1].role === role) {
+                    contents[contents.length - 1].parts[0].text += '\n\n' + text;
+                } else {
+                    contents.push({ role, parts: [{ text }] });
+                }
+            }
+            // Ilk mesajin 'user' rolu olmasini garanti et
+            while (contents.length > 0 && contents[0].role !== 'user') {
+                contents.shift();
+            }
+        } else {
+            const userMessage = (body && body.message ? body.message : '').trim();
+            if (userMessage) {
+                contents = [{ role: 'user', parts: [{ text: userMessage }] }];
+            }
+        }
+
+        if (contents.length === 0 || contents[contents.length - 1].role !== 'user') {
+            return res.status(400).json({ error: 'Lütfen incelenmek üzere hukuki durumunuzu veya sorunuzu belirtiniz.' });
         }
 
         // Gemini REST API Çağrısı (Yüksek erişilebilirlik için çoklu model yedeği)
@@ -72,12 +96,7 @@ module.exports = async function handler(req, res) {
                         systemInstruction: {
                             parts: [{ text: SYSTEM_PROMPT }]
                         },
-                        contents: [
-                            {
-                                role: 'user',
-                                parts: [{ text: userMessage }]
-                            }
-                        ],
+                        contents: contents,
                         generationConfig: {
                             temperature: 0.3,
                             maxOutputTokens: 8192
