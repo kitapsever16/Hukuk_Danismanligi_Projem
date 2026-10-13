@@ -81,7 +81,7 @@ module.exports = async function handler(req, res) {
         }
 
         // Gemini REST API Çağrısı (Yüksek erişilebilirlik için çoklu model yedeği)
-        const candidateModels = ['gemini-flash-latest', 'gemini-3.8-flash', 'gemini-3.5-flash'];
+        const candidateModels = ['gemini-flash-lite-latest', 'gemini-3.1-flash-lite', 'gemini-3.5-flash-lite', 'gemini-flash-latest'];
         let response = null;
         let lastError = null;
 
