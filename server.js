@@ -5,6 +5,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const danisHandler = require('./api/danis');
+const telegramHandler = require('./api/telegram');
 
 // .env dosyasını varsa elle oku (harici dotenv paketi zorunluluğu olmadan)
 const envPath = path.join(__dirname, '.env');
@@ -37,6 +38,26 @@ const server = http.createServer(async (req, res) => {
                 res.end(JSON.stringify(data));
             };
             await danisHandler(req, res);
+        });
+        return;
+    }
+
+    // Telegram Bot Webhook İstekleri
+    if (req.url === '/api/telegram' || req.url.startsWith('/api/telegram?')) {
+        let bodyBuffer = '';
+        req.on('data', chunk => { bodyBuffer += chunk; });
+        req.on('end', async () => {
+            req.body = bodyBuffer;
+            res.status = (code) => { res.statusCode = code; return res; };
+            res.send = (data) => {
+                res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+                res.end(data);
+            };
+            res.json = (data) => {
+                res.setHeader('Content-Type', 'application/json; charset=utf-8');
+                res.end(JSON.stringify(data));
+            };
+            await telegramHandler(req, res);
         });
         return;
     }
