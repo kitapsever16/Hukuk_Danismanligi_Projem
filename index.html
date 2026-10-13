@@ -759,6 +759,140 @@
             font-weight: 500;
         }
 
+        
+        /* Belge / Tutanak Yükleme Arayüzü */
+        .attach-doc-btn {
+            background: rgba(220, 38, 38, 0.16);
+            border: 1px dashed var(--gold-primary);
+            color: var(--gold-light);
+            padding: 11px 18px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .attach-doc-btn:hover {
+            background: rgba(220, 38, 38, 0.32);
+            border-color: #fef08a;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.35);
+        }
+
+        .attach-doc-btn svg {
+            width: 17px;
+            height: 17px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+
+        .doc-preview-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(20, 6, 9, 0.95);
+            border: 1px solid rgba(250, 204, 21, 0.35);
+            border-left: 4px solid #22c55e;
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-top: 14px;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .doc-preview-thumb {
+            width: 44px;
+            height: 44px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid rgba(250, 204, 21, 0.3);
+            background: #0b0305;
+            flex-shrink: 0;
+        }
+
+        .doc-preview-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .doc-preview-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #fef2f2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .doc-preview-status {
+            font-size: 11px;
+            color: #86efac;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .doc-remove-btn {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .doc-remove-btn:hover {
+            background: #ef4444;
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+
+        .user-attached-thumb {
+            margin-top: 10px;
+            max-width: 220px;
+            max-height: 160px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1.5px solid rgba(250, 204, 21, 0.4);
+            display: block;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+        }
+
+        .user-attached-thumb:hover {
+            transform: scale(1.03);
+            border-color: #fef08a;
+        }
+
+        .attachment-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(220, 38, 38, 0.2);
+            border: 1px solid rgba(250, 204, 21, 0.3);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--gold-light);
+            margin-top: 8px;
+        }
+
         @media (max-width: 768px) {
             .header {
                 padding: 16px 20px;
@@ -782,6 +916,407 @@
             }
         }
     </style>
+    <!-- PDF Belge İnceleme Kütüphanesi -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        let consultationHistory = [];
+        let currentAttachmentInitial = null;
+        let currentAttachmentFollowup = null;
+
+        function quickFill(text) {
+            const textarea = document.getElementById('crisisInput');
+            textarea.value = text;
+            textarea.focus();
+        }
+
+        function quickAsk(text) {
+            const textarea = document.getElementById('crisisInput');
+            textarea.value = text;
+            handleConsultation();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.innerText = text;
+            return div.innerHTML;
+        }
+
+        // Dosya (Görsel veya PDF) İşleme & Optimizasyon Fonksiyonu
+        async function processFile(file) {
+            const fileName = file.name;
+            const isPdf = file.type === 'application/pdf' || fileName.toLowerCase().endsWith('.pdf');
+
+            if (isPdf) {
+                if (!window.pdfjsLib) {
+                    throw new Error("PDF kütüphanesi yüklenemedi. Lütfen belgeyi fotoğraf formatında (JPG/PNG) yükleyiniz.");
+                }
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                const page = await pdf.getPage(1);
+                const viewport = page.getViewport({ scale: 2.0 });
+                const canvas = document.createElement('canvas');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                const ctx = canvas.getContext('2d');
+                await page.render({ canvasContext: ctx, viewport }).promise;
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                const b64 = dataUrl.split(',')[1];
+                return {
+                    name: fileName,
+                    mimeType: 'image/jpeg',
+                    data: b64,
+                    previewUrl: dataUrl
+                };
+            } else {
+                // Görsel İşleme & Çözünürlük Optimizasyonu (Maks 1600px)
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const maxDim = 1600;
+                            let w = img.width;
+                            let h = img.height;
+                            if (w > maxDim || h > maxDim) {
+                                if (w > h) {
+                                    h = Math.round((h * maxDim) / w);
+                                    w = maxDim;
+                                } else {
+                                    w = Math.round((w * maxDim) / h);
+                                    h = maxDim;
+                                }
+                            }
+                            const canvas = document.createElement('canvas');
+                            canvas.width = w;
+                            canvas.height = h;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, w, h);
+                            const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                            const b64 = dataUrl.split(',')[1];
+                            resolve({
+                                name: fileName,
+                                mimeType: 'image/jpeg',
+                                data: b64,
+                                previewUrl: dataUrl
+                            });
+                        };
+                        img.onerror = () => reject(new Error("Görsel okunamadı."));
+                        img.src = e.target.result;
+                    };
+                    reader.onerror = () => reject(new Error("Dosya okunamadı."));
+                    reader.readAsDataURL(file);
+                });
+            }
+        }
+
+        async function handleFileSelect(event, type) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            try {
+                const processed = await processFile(file);
+                if (type === 'initial') {
+                    currentAttachmentInitial = processed;
+                    document.getElementById('docPreviewNameInitial').innerText = processed.name;
+                    document.getElementById('docPreviewThumbInitial').src = processed.previewUrl;
+                    document.getElementById('docPreviewInitial').style.display = 'flex';
+                } else {
+                    currentAttachmentFollowup = processed;
+                    document.getElementById('docPreviewNameFollowup').innerText = processed.name;
+                    document.getElementById('docPreviewThumbFollowup').src = processed.previewUrl;
+                    document.getElementById('docPreviewFollowup').style.display = 'flex';
+                }
+            } catch (err) {
+                alert("Belge yükleme hatası: " + err.message);
+            }
+        }
+
+        function removeAttachment(type) {
+            if (type === 'initial') {
+                currentAttachmentInitial = null;
+                document.getElementById('docPreviewInitial').style.display = 'none';
+                document.getElementById('fileInputInitial').value = '';
+            } else {
+                currentAttachmentFollowup = null;
+                document.getElementById('docPreviewFollowup').style.display = 'none';
+                document.getElementById('fileInputFollowup').value = '';
+            }
+        }
+
+        function appendUserMessage(text, attachment) {
+            const chatMessages = document.getElementById('chatMessages');
+            const userDiv = document.createElement('div');
+            userDiv.className = 'chat-turn chat-turn-user';
+
+            let attachHtml = '';
+            if (attachment && attachment.previewUrl) {
+                attachHtml = `
+                    <div class="attachment-tag">
+                        <span>📎 İncelenen Belge:</span> <strong>${escapeHtml(attachment.name)}</strong>
+                    </div>
+                    <img src="${attachment.previewUrl}" alt="Eklenen Belge" class="user-attached-thumb" onclick="window.open(this.src, '_blank')">
+                `;
+            }
+
+            userDiv.innerHTML = `
+                <div class="turn-header">
+                    <span class="turn-badge user-badge">
+                        <span class="badge-dot"></span> SİZİN BEYANINIZ / SORUNUZ
+                    </span>
+                </div>
+                <div class="user-bubble-content">${escapeHtml(text)}</div>
+                ${attachHtml}
+            `;
+            chatMessages.appendChild(userDiv);
+            userDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function appendAssistantMessage(text) {
+            const chatMessages = document.getElementById('chatMessages');
+            const asstDiv = document.createElement('div');
+            asstDiv.className = 'chat-turn chat-turn-assistant';
+            const formatted = formatLegalText(text);
+            asstDiv.innerHTML = `
+                <div class="turn-header">
+                    <div class="turn-badge assistant-badge">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--gold-primary)">
+                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                        </svg>
+                        <span>HUKUK DANIŞMANI | ACİL EYLEM & SAVUNMA PLANI</span>
+                    </div>
+                    <button class="copy-turn-btn" onclick="copyTurnText(this)">
+                        📋 Metni Kopyala
+                    </button>
+                </div>
+                <div class="assistant-bubble-content">${formatted}</div>
+            `;
+            chatMessages.appendChild(asstDiv);
+            asstDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        async function handleConsultation() {
+            let input = document.getElementById('crisisInput').value.trim();
+            const attachment = currentAttachmentInitial;
+
+            if (!input && !attachment) {
+                alert("Lütfen bir soru yazınız veya incelemek üzere belge/tutanak yükleyiniz.");
+                return;
+            }
+
+            if (!input && attachment) {
+                input = "Yüklediğim bu adli belgeyi/tutanağı inceleyiniz; hukuka aykırılıkları ve haklarım konusunda acil yol haritasını belirleyiniz.";
+            }
+
+            const askBtn = document.getElementById('askBtn');
+            const loadingBox = document.getElementById('loadingBox');
+            const consultationThread = document.getElementById('consultationThread');
+            const initialCrisisCard = document.getElementById('initialCrisisCard');
+            const emergencyActions = document.getElementById('emergencyActions');
+            const followupCard = document.getElementById('followupCard');
+
+            askBtn.disabled = true;
+            loadingBox.style.display = 'flex';
+            loadingBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            const userMsgObj = { role: 'user', content: input };
+            if (attachment) {
+                userMsgObj.attachment = { mimeType: attachment.mimeType, data: attachment.data };
+            }
+
+            consultationHistory = [userMsgObj];
+
+            try {
+                const response = await fetch('/api/danis', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messages: consultationHistory })
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Hukuk servisine ulaşılamadı.');
+                }
+
+                consultationHistory.push({ role: 'assistant', content: data.answer });
+
+                initialCrisisCard.style.display = 'none';
+                emergencyActions.style.display = 'none';
+                consultationThread.style.display = 'block';
+
+                appendUserMessage(input, attachment);
+                appendAssistantMessage(data.answer);
+
+                removeAttachment('initial');
+
+                followupCard.style.display = 'block';
+                document.getElementById('followupInput').value = '';
+                document.getElementById('followupInput').focus();
+
+            } catch (err) {
+                alert("Savunma hattı bağlantı hatası: " + err.message);
+                consultationHistory = [];
+            } finally {
+                askBtn.disabled = false;
+                loadingBox.style.display = 'none';
+            }
+        }
+
+        async function handleFollowup() {
+            const followupInput = document.getElementById('followupInput');
+            let text = followupInput.value.trim();
+            const attachment = currentAttachmentFollowup;
+
+            if (!text && !attachment) {
+                alert("Lütfen sormak istediğiniz yeni soruyu yazınız veya yeni bir belge yükleyiniz.");
+                return;
+            }
+
+            if (!text && attachment) {
+                text = "Dosyaya ek olarak bu yeni belgeyi sunuyorum; inceleyip süreci nasıl etkilediğini ve ne yapmam gerektiğini açıklayınız.";
+            }
+
+            const followupBtn = document.getElementById('followupBtn');
+            const threadLoading = document.getElementById('threadLoading');
+
+            followupBtn.disabled = true;
+            followupInput.disabled = true;
+
+            appendUserMessage(text, attachment);
+
+            const userMsgObj = { role: 'user', content: text };
+            if (attachment) {
+                userMsgObj.attachment = { mimeType: attachment.mimeType, data: attachment.data };
+            }
+            consultationHistory.push(userMsgObj);
+
+            followupInput.value = '';
+            removeAttachment('followup');
+
+            threadLoading.style.display = 'flex';
+            threadLoading.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            try {
+                const response = await fetch('/api/danis', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messages: consultationHistory })
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Hukuk servisine ulaşılamadı.');
+                }
+
+                consultationHistory.push({ role: 'assistant', content: data.answer });
+                appendAssistantMessage(data.answer);
+
+            } catch (err) {
+                alert("Savunma hattı bağlantı hatası: " + err.message);
+                consultationHistory.pop();
+            } finally {
+                followupBtn.disabled = false;
+                followupInput.disabled = false;
+                threadLoading.style.display = 'none';
+                followupInput.focus();
+            }
+        }
+
+        function startNewCase() {
+            if (consultationHistory.length > 0) {
+                const confirmClose = confirm("Aktif danışma seansını sonlandırıp yeni bir hukuki vaka başlatmak istiyor musunuz?");
+                if (!confirmClose) return;
+            }
+
+            consultationHistory = [];
+            removeAttachment('initial');
+            removeAttachment('followup');
+
+            document.getElementById('chatMessages').innerHTML = '';
+            document.getElementById('consultationThread').style.display = 'none';
+            document.getElementById('followupCard').style.display = 'none';
+            document.getElementById('initialCrisisCard').style.display = 'block';
+            document.getElementById('emergencyActions').style.display = 'flex';
+            document.getElementById('crisisInput').value = '';
+            document.getElementById('followupInput').value = '';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('crisisInput').focus();
+        }
+
+        function copyTurnText(btn) {
+            const turnDiv = btn.closest('.chat-turn-assistant');
+            if (!turnDiv) return;
+            const content = turnDiv.querySelector('.assistant-bubble-content');
+            if (!content) return;
+
+            navigator.clipboard.writeText(content.innerText).then(() => {
+                const origText = btn.innerHTML;
+                btn.innerHTML = '✓ Kopyalandı!';
+                btn.style.background = 'var(--gold-primary)';
+                btn.style.color = '#450a0a';
+                setTimeout(() => {
+                    btn.innerHTML = origText;
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }, 2000);
+            }).catch(() => {
+                alert("Metin kopyalanamadı.");
+            });
+        }
+
+        function formatLegalText(text) {
+            if (!text) return '';
+
+            let formatted = text;
+
+            // 1. Yatay çizgileri (---, ***, ___) tamamen kaldır
+            formatted = formatted.replace(/^\s*[-*_]{2,}\s*$/gm, '');
+
+            // 2. Alıntı ve liste işaretçilerini (> * "..." veya > "...") temizle
+            formatted = formatted.replace(/^\s*>\s*\*?\s*/gm, '');
+            formatted = formatted.replace(/"\s*\*+\s*$/gm, '"');
+
+            // 3. Madde başı yıldız ve tire işaretlerini (* ve -) temizle
+            formatted = formatted.replace(/^\s*[\*\-]\s+/gm, '');
+
+            // 4. Tek başına kalan sembol satırlarını (> *, *, - vb.) sil
+            formatted = formatted.replace(/^\s*[>\*\-]+\s*$/gm, '');
+
+            // 5. Aşırı satır boşluklarını sadeleştir
+            formatted = formatted.replace(/\n{3,}/g, '\n\n');
+
+            // 6. HTML karakterlerini güvenle kaçır
+            formatted = formatted
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+
+            // 7. Tırnak içindeki replikleri şık alıntı kutusuna dönüştür
+            formatted = formatted.replace(/"([^"\n]+)"/g, '<blockquote class="response-quote">"$1"</blockquote>');
+
+            // 8. Başlıkları dönüştür (### veya ##)
+            formatted = formatted.replace(/^###?\s+(.*$)/gim, '<h4 class="response-step-title">$1</h4>');
+
+            // 9. Kalın yazıları dönüştür (**...**)
+            formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+            // 10. Kalan başıboş yıldız veya büyüktür işaretlerini temizle
+            formatted = formatted.replace(/^\s*[\*\>]\s*$/gm, '');
+
+            return formatted.trim();
+        }
+
+        // Ctrl+Enter / Cmd+Enter ile hızlı gönderme desteği
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                if (document.activeElement === document.getElementById('crisisInput')) {
+                    handleConsultation();
+                } else if (document.activeElement === document.getElementById('followupInput')) {
+                    handleFollowup();
+                }
+            }
+        });
+    </script>
 </head>
 <body>
 
@@ -819,18 +1354,36 @@
         <!-- Soru Sorma Kartı (Başlangıç) -->
         <div class="crisis-card" id="initialCrisisCard">
             <div class="card-label">
-                <span>HAKKINIZI ARAYIN</span>
+                <span>HAKKINIZI ARAYIN & BELGE YÜKLEYİN</span>
             </div>
 
             <textarea 
                 id="crisisInput" 
                 class="crisis-textarea" 
-                placeholder="Örnek: Şu an polisler tarafından durduruldum, yazılı arama kararı göstermeden arabamı aramak istiyorlar. Memura tam olarak ne söylemeliyim ve ne yapmalıyım?..."
+                placeholder="Örnek: Şu an polisler tarafından durduruldum, yazılı arama kararı göstermeden arabamı aramak istiyorlar. Memura tam olarak ne söylemeliyim? Veya aşağıdaki butondan tutanak/belge fotoğrafı yükleyin..."
             ></textarea>
 
+            <!-- Belge Önizleme Alanı -->
+            <div class="doc-preview-box" id="docPreviewInitial" style="display:none;">
+                <img id="docPreviewThumbInitial" class="doc-preview-thumb" src="" alt="Önizleme">
+                <div class="doc-preview-info">
+                    <span class="doc-preview-name" id="docPreviewNameInitial">belge.jpg</span>
+                    <span class="doc-preview-status">✓ Adli belge incelenmeye hazır</span>
+                </div>
+                <button type="button" class="doc-remove-btn" onclick="removeAttachment('initial')">✕</button>
+            </div>
+
             <div class="card-footer">
-                <div class="ai-disclaimer-note">
-                    ℹ️ Yanıtlar yapay zekâ tabanlı hukuki danışman tarafından üretilir; resmi vekâlet ilişkisi kurmaz ve avukat yardımı yerine geçmez.
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <button type="button" class="attach-doc-btn" onclick="document.getElementById('fileInputInitial').click()">
+                        <svg viewBox="0 0 24 24"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/></svg>
+                        <span>📎 Belge / Tutanak Yükle</span>
+                    </button>
+                    <input type="file" id="fileInputInitial" style="display: none;" accept="image/*,application/pdf" onchange="handleFileSelect(event, 'initial')">
+                    
+                    <div class="ai-disclaimer-note">
+                        ℹ️ Tutanak, arama kararı veya iddianame fotoğrafı ekleyebilirsiniz.
+                    </div>
                 </div>
 
                 <button class="submit-btn" id="askBtn" onclick="handleConsultation()">
@@ -880,14 +1433,31 @@
                     </h4>
                 </div>
                 <p class="followup-desc">
-                    Polisin yeni bir talebi, arama ısrarı veya tutanak dayatması varsa buraya yazın. Avukatınız görüşmenin başını ve durumunuzu unutmadan adım adım yol göstermeye devam eder.
+                    Polisin yeni bir talebi, arama ısrarı veya tutanak dayatması varsa buraya yazın ya da yeni belge/fotoğraf ekleyin. Avukatınız görüşmenin başını unutmadan yol göstermeye devam eder.
                 </p>
                 <textarea 
                     id="followupInput" 
                     class="crisis-textarea followup-textarea" 
                     placeholder="Örn: 'Kimliğimi verdim fakat şimdi bagajı açmamı istiyorlar, ne demeliyim?' veya 'Tutanakta şu madde yazıyor, imzalamadan önce ne yazmalıyım?'..."
                 ></textarea>
+
+                <!-- Takip Belgesi Önizleme -->
+                <div class="doc-preview-box" id="docPreviewFollowup" style="display:none; margin-bottom: 14px;">
+                    <img id="docPreviewThumbFollowup" class="doc-preview-thumb" src="" alt="Önizleme">
+                    <div class="doc-preview-info">
+                        <span class="doc-preview-name" id="docPreviewNameFollowup">belge.jpg</span>
+                        <span class="doc-preview-status">✓ Adli belge incelenmeye hazır</span>
+                    </div>
+                    <button type="button" class="doc-remove-btn" onclick="removeAttachment('followup')">✕</button>
+                </div>
+
                 <div class="followup-actions">
+                    <button type="button" class="attach-doc-btn" onclick="document.getElementById('fileInputFollowup').click()">
+                        <svg viewBox="0 0 24 24"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/></svg>
+                        <span>📎 Yeni Belge Ekle</span>
+                    </button>
+                    <input type="file" id="fileInputFollowup" style="display: none;" accept="image/*,application/pdf" onchange="handleFileSelect(event, 'followup')">
+
                     <button class="new-case-btn" onclick="startNewCase()">
                         🔄 Dosyayı Kapat / Yeni Vaka
                     </button>
@@ -923,6 +1493,8 @@
 
     <script>
         let consultationHistory = [];
+        let currentAttachmentInitial = null;
+        let currentAttachmentFollowup = null;
 
         function quickFill(text) {
             const textarea = document.getElementById('crisisInput');
@@ -942,10 +1514,123 @@
             return div.innerHTML;
         }
 
-        function appendUserMessage(text) {
+        // Dosya (Görsel veya PDF) İşleme & Optimizasyon Fonksiyonu
+        async function processFile(file) {
+            const fileName = file.name;
+            const isPdf = file.type === 'application/pdf' || fileName.toLowerCase().endsWith('.pdf');
+
+            if (isPdf) {
+                if (!window.pdfjsLib) {
+                    throw new Error("PDF kütüphanesi yüklenemedi. Lütfen belgeyi fotoğraf formatında (JPG/PNG) yükleyiniz.");
+                }
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                const page = await pdf.getPage(1);
+                const viewport = page.getViewport({ scale: 2.0 });
+                const canvas = document.createElement('canvas');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                const ctx = canvas.getContext('2d');
+                await page.render({ canvasContext: ctx, viewport }).promise;
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                const b64 = dataUrl.split(',')[1];
+                return {
+                    name: fileName,
+                    mimeType: 'image/jpeg',
+                    data: b64,
+                    previewUrl: dataUrl
+                };
+            } else {
+                // Görsel İşleme & Çözünürlük Optimizasyonu (Maks 1600px)
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const maxDim = 1600;
+                            let w = img.width;
+                            let h = img.height;
+                            if (w > maxDim || h > maxDim) {
+                                if (w > h) {
+                                    h = Math.round((h * maxDim) / w);
+                                    w = maxDim;
+                                } else {
+                                    w = Math.round((w * maxDim) / h);
+                                    h = maxDim;
+                                }
+                            }
+                            const canvas = document.createElement('canvas');
+                            canvas.width = w;
+                            canvas.height = h;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, w, h);
+                            const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                            const b64 = dataUrl.split(',')[1];
+                            resolve({
+                                name: fileName,
+                                mimeType: 'image/jpeg',
+                                data: b64,
+                                previewUrl: dataUrl
+                            });
+                        };
+                        img.onerror = () => reject(new Error("Görsel okunamadı."));
+                        img.src = e.target.result;
+                    };
+                    reader.onerror = () => reject(new Error("Dosya okunamadı."));
+                    reader.readAsDataURL(file);
+                });
+            }
+        }
+
+        async function handleFileSelect(event, type) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            try {
+                const processed = await processFile(file);
+                if (type === 'initial') {
+                    currentAttachmentInitial = processed;
+                    document.getElementById('docPreviewNameInitial').innerText = processed.name;
+                    document.getElementById('docPreviewThumbInitial').src = processed.previewUrl;
+                    document.getElementById('docPreviewInitial').style.display = 'flex';
+                } else {
+                    currentAttachmentFollowup = processed;
+                    document.getElementById('docPreviewNameFollowup').innerText = processed.name;
+                    document.getElementById('docPreviewThumbFollowup').src = processed.previewUrl;
+                    document.getElementById('docPreviewFollowup').style.display = 'flex';
+                }
+            } catch (err) {
+                alert("Belge yükleme hatası: " + err.message);
+            }
+        }
+
+        function removeAttachment(type) {
+            if (type === 'initial') {
+                currentAttachmentInitial = null;
+                document.getElementById('docPreviewInitial').style.display = 'none';
+                document.getElementById('fileInputInitial').value = '';
+            } else {
+                currentAttachmentFollowup = null;
+                document.getElementById('docPreviewFollowup').style.display = 'none';
+                document.getElementById('fileInputFollowup').value = '';
+            }
+        }
+
+        function appendUserMessage(text, attachment) {
             const chatMessages = document.getElementById('chatMessages');
             const userDiv = document.createElement('div');
             userDiv.className = 'chat-turn chat-turn-user';
+
+            let attachHtml = '';
+            if (attachment && attachment.previewUrl) {
+                attachHtml = `
+                    <div class="attachment-tag">
+                        <span>📎 İncelenen Belge:</span> <strong>${escapeHtml(attachment.name)}</strong>
+                    </div>
+                    <img src="${attachment.previewUrl}" alt="Eklenen Belge" class="user-attached-thumb" onclick="window.open(this.src, '_blank')">
+                `;
+            }
+
             userDiv.innerHTML = `
                 <div class="turn-header">
                     <span class="turn-badge user-badge">
@@ -953,6 +1638,7 @@
                     </span>
                 </div>
                 <div class="user-bubble-content">${escapeHtml(text)}</div>
+                ${attachHtml}
             `;
             chatMessages.appendChild(userDiv);
             userDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -982,10 +1668,16 @@
         }
 
         async function handleConsultation() {
-            const input = document.getElementById('crisisInput').value.trim();
-            if (!input) {
-                alert("Lütfen karşılaştığınız hukuki durumu veya sorunuzu yazınız.");
+            let input = document.getElementById('crisisInput').value.trim();
+            const attachment = currentAttachmentInitial;
+
+            if (!input && !attachment) {
+                alert("Lütfen bir soru yazınız veya incelemek üzere belge/tutanak yükleyiniz.");
                 return;
+            }
+
+            if (!input && attachment) {
+                input = "Yüklediğim bu adli belgeyi/tutanağı inceleyiniz; hukuka aykırılıkları ve haklarım konusunda acil yol haritasını belirleyiniz.";
             }
 
             const askBtn = document.getElementById('askBtn');
@@ -999,7 +1691,12 @@
             loadingBox.style.display = 'flex';
             loadingBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            consultationHistory = [{ role: 'user', content: input }];
+            const userMsgObj = { role: 'user', content: input };
+            if (attachment) {
+                userMsgObj.attachment = { mimeType: attachment.mimeType, data: attachment.data };
+            }
+
+            consultationHistory = [userMsgObj];
 
             try {
                 const response = await fetch('/api/danis', {
@@ -1019,8 +1716,10 @@
                 emergencyActions.style.display = 'none';
                 consultationThread.style.display = 'block';
 
-                appendUserMessage(input);
+                appendUserMessage(input, attachment);
                 appendAssistantMessage(data.answer);
+
+                removeAttachment('initial');
 
                 followupCard.style.display = 'block';
                 document.getElementById('followupInput').value = '';
@@ -1037,10 +1736,16 @@
 
         async function handleFollowup() {
             const followupInput = document.getElementById('followupInput');
-            const text = followupInput.value.trim();
-            if (!text) {
-                alert("Lütfen sormak istediğiniz yeni soruyu veya gelişmeyi yazınız.");
+            let text = followupInput.value.trim();
+            const attachment = currentAttachmentFollowup;
+
+            if (!text && !attachment) {
+                alert("Lütfen sormak istediğiniz yeni soruyu yazınız veya yeni bir belge yükleyiniz.");
                 return;
+            }
+
+            if (!text && attachment) {
+                text = "Dosyaya ek olarak bu yeni belgeyi sunuyorum; inceleyip süreci nasıl etkilediğini ve ne yapmam gerektiğini açıklayınız.";
             }
 
             const followupBtn = document.getElementById('followupBtn');
@@ -1049,9 +1754,16 @@
             followupBtn.disabled = true;
             followupInput.disabled = true;
 
-            appendUserMessage(text);
-            consultationHistory.push({ role: 'user', content: text });
+            appendUserMessage(text, attachment);
+
+            const userMsgObj = { role: 'user', content: text };
+            if (attachment) {
+                userMsgObj.attachment = { mimeType: attachment.mimeType, data: attachment.data };
+            }
+            consultationHistory.push(userMsgObj);
+
             followupInput.value = '';
+            removeAttachment('followup');
 
             threadLoading.style.display = 'flex';
             threadLoading.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1089,6 +1801,9 @@
             }
 
             consultationHistory = [];
+            removeAttachment('initial');
+            removeAttachment('followup');
+
             document.getElementById('chatMessages').innerHTML = '';
             document.getElementById('consultationThread').style.display = 'none';
             document.getElementById('followupCard').style.display = 'none';
