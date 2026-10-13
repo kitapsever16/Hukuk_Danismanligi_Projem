@@ -518,6 +518,247 @@
             color: #8f6a6f;
         }
 
+
+        /* Kesintisiz Danışma Seansı & Sohbet Akışı */
+        .consultation-thread {
+            display: none;
+            width: 100%;
+            margin-top: 24px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .case-status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(35, 12, 17, 0.95) 0%, rgba(20, 6, 9, 0.98) 100%);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--gold-primary);
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 24px;
+            gap: 12px;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+        }
+
+        .case-status-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gold-light);
+            letter-spacing: 0.5px;
+        }
+
+        .status-pulsing-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+            animation: pulseGreen 1.5s infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes pulseGreen {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        .new-case-btn {
+            background: rgba(220, 38, 38, 0.2);
+            border: 1px solid rgba(250, 204, 21, 0.4);
+            color: #fef08a;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .new-case-btn:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            border-color: #facc15;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Karşılıklı Mesaj Öğeleri */
+        .chat-turn {
+            width: 100%;
+            margin-bottom: 24px;
+            animation: fadeIn 0.35s ease;
+        }
+
+        .chat-turn-user {
+            background: linear-gradient(135deg, rgba(32, 11, 16, 0.95) 0%, rgba(22, 7, 11, 0.98) 100%);
+            border: 1px solid rgba(250, 204, 21, 0.25);
+            border-left: 4px solid var(--gold-primary);
+            border-radius: 16px;
+            padding: 20px 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .chat-turn-assistant {
+            background: linear-gradient(165deg, rgba(28, 9, 13, 0.96) 0%, rgba(18, 5, 8, 0.98) 100%);
+            border: 1.5px solid var(--gold-primary);
+            border-radius: 20px;
+            padding: 28px 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 30px rgba(220, 38, 38, 0.2);
+        }
+
+        .turn-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            border-bottom: 1px solid rgba(250, 204, 21, 0.15);
+            padding-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .turn-badge {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+        }
+
+        .user-badge {
+            color: var(--gold-light);
+        }
+
+        .user-badge .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #facc15;
+            box-shadow: 0 0 6px #facc15;
+        }
+
+        .assistant-badge {
+            color: #fef08a;
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+        }
+
+        .copy-turn-btn {
+            background: rgba(220, 38, 38, 0.22);
+            border: 1px solid var(--gold-primary);
+            color: var(--gold-light);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .copy-turn-btn:hover {
+            background: var(--gold-primary);
+            color: #450a0a;
+            box-shadow: 0 0 12px rgba(250, 204, 21, 0.35);
+        }
+
+        .user-bubble-content {
+            font-size: 15px;
+            color: #fef2f2;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .assistant-bubble-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #fce7e7;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .assistant-bubble-content strong {
+            color: var(--gold-light);
+        }
+
+        /* Takip / Devam Kartı */
+        .followup-card {
+            background: linear-gradient(165deg, rgba(28, 9, 13, 0.94) 0%, rgba(18, 5, 8, 0.98) 100%);
+            border: 1px solid var(--border-color);
+            border-top: 2px solid var(--gold-primary);
+            border-radius: 20px;
+            padding: 26px;
+            margin-top: 30px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.7);
+        }
+
+        .followup-card-header {
+            margin-bottom: 10px;
+        }
+
+        .followup-card-header h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gold-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .followup-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        .followup-textarea {
+            min-height: 100px;
+            margin-bottom: 16px;
+        }
+
+        .followup-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .thread-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            padding: 20px;
+            background: rgba(26, 9, 13, 0.88);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            margin: 18px 0;
+            animation: pulse 1.8s infinite;
+        }
+
+        .thread-loading-text {
+            color: var(--gold-light);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
         @media (max-width: 768px) {
             .header {
                 padding: 16px 20px;
@@ -525,10 +766,17 @@
             .main-container {
                 padding: 40px 16px 60px;
             }
-            .crisis-card, .response-card {
+            .crisis-card, .response-card, .chat-turn-assistant, .chat-turn-user, .followup-card {
                 padding: 20px;
             }
-            .submit-btn {
+            .submit-btn, .followup-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .followup-actions {
+                flex-direction: column-reverse;
+            }
+            .new-case-btn {
                 width: 100%;
                 justify-content: center;
             }
@@ -552,12 +800,12 @@
     <!-- Ana Ekran / Karşılama ve Müdahale Merkezi -->
     <main class="main-container">
 
-        <h2 class="hero-title">
+        <h2 class="hero-title" id="heroTitle">
             ÇARESİZ <span>DEĞİLSİNİZ</span>
         </h2>
 
         <!-- Acil Durum Hızlı Müdahale Butonları -->
-        <div class="emergency-actions">
+        <div class="emergency-actions" id="emergencyActions">
             <button class="emergency-btn" onclick="quickAsk('Evime polis baskını yapılırsa ne yapmalıyım? Arama kararı, girilme saati, avukat hakkım ve tutanak konusunda adım adım ne yapmam gerekir?')">
                 <span class="btn-icon">★</span>
                 <span>Evime Polis Baskını Yapılırsa Ne Yapmalıyım?</span>
@@ -568,8 +816,8 @@
             </button>
         </div>
 
-        <!-- Soru Sorma Kartı -->
-        <div class="crisis-card">
+        <!-- Soru Sorma Kartı (Başlangıç) -->
+        <div class="crisis-card" id="initialCrisisCard">
             <div class="card-label">
                 <span>HAKKINIZI ARAYIN</span>
             </div>
@@ -594,26 +842,64 @@
             </div>
         </div>
 
-        <!-- Yükleniyor Bildirimi -->
+        <!-- Yükleniyor Bildirimi (İlk Soru İçin) -->
         <div class="loading-box" id="loadingBox">
             <div class="spinner"></div>
             <div class="loading-text">Mevzuat maddeleri ve vakanız inceleniyor... Hukuki yol haritası hazırlanıyor.</div>
         </div>
 
-        <!-- Canlı Savunma ve Rapor Yanıt Kartı -->
-        <div class="response-card" id="responseCard">
-            <div class="response-header">
-                <div class="response-title">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--gold-primary)">
-                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-                    </svg>
-                    <h3>Hukuki Değerlendirme ve Yol Haritası</h3>
+        <!-- Kesintisiz Hukuki Danışma Seansı / Canlı Dava & Savunma Akışı -->
+        <div class="consultation-thread" id="consultationThread">
+            
+            <!-- Vaka Durum Barı -->
+            <div class="case-status-bar">
+                <div class="case-status-info">
+                    <span class="status-pulsing-dot"></span>
+                    <span>CANLI SAVUNMA HATTI & AKTİF DANIŞMA SEANSI</span>
                 </div>
-                <button class="copy-btn" onclick="copyResponse()">
-                    📋 Metni ve Dilekçeyi Kopyala
+                <button class="new-case-btn" onclick="startNewCase()">
+                    🔄 Yeni Vaka / Dosyayı Kapat
                 </button>
             </div>
-            <div class="response-content" id="responseContent"></div>
+
+            <!-- Karşılıklı Diyalog Akışı -->
+            <div id="chatMessages"></div>
+
+            <!-- Takip Sorusu Yükleniyor Göstergesi -->
+            <div class="thread-loading" id="threadLoading" style="display: none;">
+                <div class="spinner"></div>
+                <div class="thread-loading-text">Avukatınız yeni gelişmeyi ve dosyanızı inceliyor...</div>
+            </div>
+
+            <!-- Takip Sorusu / Süreci İlerletme Alanı -->
+            <div class="followup-card" id="followupCard" style="display: none;">
+                <div class="followup-card-header">
+                    <h4>
+                        <span class="status-pulsing-dot"></span>
+                        Süreç Devam Ediyor mu? Aynı Dosyadan Sormaya Devam Edin
+                    </h4>
+                </div>
+                <p class="followup-desc">
+                    Polisin yeni bir talebi, arama ısrarı veya tutanak dayatması varsa buraya yazın. Avukatınız görüşmenin başını ve durumunuzu unutmadan adım adım yol göstermeye devam eder.
+                </p>
+                <textarea 
+                    id="followupInput" 
+                    class="crisis-textarea followup-textarea" 
+                    placeholder="Örn: 'Kimliğimi verdim fakat şimdi bagajı açmamı istiyorlar, ne demeliyim?' veya 'Tutanakta şu madde yazıyor, imzalamadan önce ne yazmalıyım?'..."
+                ></textarea>
+                <div class="followup-actions">
+                    <button class="new-case-btn" onclick="startNewCase()">
+                        🔄 Dosyayı Kapat / Yeni Vaka
+                    </button>
+                    <button class="submit-btn followup-btn" id="followupBtn" onclick="handleFollowup()">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                        Süreci İlerlet & Savunmayı Al
+                    </button>
+                </div>
+            </div>
+
         </div>
 
     </main>
@@ -636,6 +922,8 @@
     </footer>
 
     <script>
+        let consultationHistory = [];
+
         function quickFill(text) {
             const textarea = document.getElementById('crisisInput');
             textarea.value = text;
@@ -648,51 +936,190 @@
             handleConsultation();
         }
 
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.innerText = text;
+            return div.innerHTML;
+        }
+
+        function appendUserMessage(text) {
+            const chatMessages = document.getElementById('chatMessages');
+            const userDiv = document.createElement('div');
+            userDiv.className = 'chat-turn chat-turn-user';
+            userDiv.innerHTML = `
+                <div class="turn-header">
+                    <span class="turn-badge user-badge">
+                        <span class="badge-dot"></span> SİZİN BEYANINIZ / SORUNUZ
+                    </span>
+                </div>
+                <div class="user-bubble-content">${escapeHtml(text)}</div>
+            `;
+            chatMessages.appendChild(userDiv);
+            userDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function appendAssistantMessage(text) {
+            const chatMessages = document.getElementById('chatMessages');
+            const asstDiv = document.createElement('div');
+            asstDiv.className = 'chat-turn chat-turn-assistant';
+            const formatted = formatLegalText(text);
+            asstDiv.innerHTML = `
+                <div class="turn-header">
+                    <div class="turn-badge assistant-badge">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--gold-primary)">
+                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                        </svg>
+                        <span>HUKUK DANIŞMANI | ACİL EYLEM & SAVUNMA PLANI</span>
+                    </div>
+                    <button class="copy-turn-btn" onclick="copyTurnText(this)">
+                        📋 Metni Kopyala
+                    </button>
+                </div>
+                <div class="assistant-bubble-content">${formatted}</div>
+            `;
+            chatMessages.appendChild(asstDiv);
+            asstDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
         async function handleConsultation() {
             const input = document.getElementById('crisisInput').value.trim();
-            const askBtn = document.getElementById('askBtn');
-            const loadingBox = document.getElementById('loadingBox');
-            const responseCard = document.getElementById('responseCard');
-            const responseContent = document.getElementById('responseContent');
-
             if (!input) {
                 alert("Lütfen karşılaştığınız hukuki durumu veya sorunuzu yazınız.");
                 return;
             }
 
-            // Arayüz Durumu: Yükleniyor
+            const askBtn = document.getElementById('askBtn');
+            const loadingBox = document.getElementById('loadingBox');
+            const consultationThread = document.getElementById('consultationThread');
+            const initialCrisisCard = document.getElementById('initialCrisisCard');
+            const emergencyActions = document.getElementById('emergencyActions');
+            const followupCard = document.getElementById('followupCard');
+
             askBtn.disabled = true;
             loadingBox.style.display = 'flex';
-            responseCard.style.display = 'none';
+            loadingBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            consultationHistory = [{ role: 'user', content: input }];
 
             try {
                 const response = await fetch('/api/danis', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ message: input })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messages: consultationHistory })
                 });
 
                 const data = await response.json();
-
                 if (!response.ok) {
                     throw new Error(data.error || 'Hukuk servisine ulaşılamadı.');
                 }
 
-                // Gelen cevabı formatla ve göster
-                responseContent.innerHTML = formatLegalText(data.answer);
-                responseCard.style.display = 'block';
+                consultationHistory.push({ role: 'assistant', content: data.answer });
 
-                // Otomatik olarak cevaba kaydır
-                responseCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                initialCrisisCard.style.display = 'none';
+                emergencyActions.style.display = 'none';
+                consultationThread.style.display = 'block';
+
+                appendUserMessage(input);
+                appendAssistantMessage(data.answer);
+
+                followupCard.style.display = 'block';
+                document.getElementById('followupInput').value = '';
+                document.getElementById('followupInput').focus();
 
             } catch (err) {
                 alert("Savunma hattı bağlantı hatası: " + err.message);
+                consultationHistory = [];
             } finally {
                 askBtn.disabled = false;
                 loadingBox.style.display = 'none';
             }
+        }
+
+        async function handleFollowup() {
+            const followupInput = document.getElementById('followupInput');
+            const text = followupInput.value.trim();
+            if (!text) {
+                alert("Lütfen sormak istediğiniz yeni soruyu veya gelişmeyi yazınız.");
+                return;
+            }
+
+            const followupBtn = document.getElementById('followupBtn');
+            const threadLoading = document.getElementById('threadLoading');
+
+            followupBtn.disabled = true;
+            followupInput.disabled = true;
+
+            appendUserMessage(text);
+            consultationHistory.push({ role: 'user', content: text });
+            followupInput.value = '';
+
+            threadLoading.style.display = 'flex';
+            threadLoading.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            try {
+                const response = await fetch('/api/danis', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messages: consultationHistory })
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Hukuk servisine ulaşılamadı.');
+                }
+
+                consultationHistory.push({ role: 'assistant', content: data.answer });
+                appendAssistantMessage(data.answer);
+
+            } catch (err) {
+                alert("Savunma hattı bağlantı hatası: " + err.message);
+                consultationHistory.pop();
+            } finally {
+                followupBtn.disabled = false;
+                followupInput.disabled = false;
+                threadLoading.style.display = 'none';
+                followupInput.focus();
+            }
+        }
+
+        function startNewCase() {
+            if (consultationHistory.length > 0) {
+                const confirmClose = confirm("Aktif danışma seansını sonlandırıp yeni bir hukuki vaka başlatmak istiyor musunuz?");
+                if (!confirmClose) return;
+            }
+
+            consultationHistory = [];
+            document.getElementById('chatMessages').innerHTML = '';
+            document.getElementById('consultationThread').style.display = 'none';
+            document.getElementById('followupCard').style.display = 'none';
+            document.getElementById('initialCrisisCard').style.display = 'block';
+            document.getElementById('emergencyActions').style.display = 'flex';
+            document.getElementById('crisisInput').value = '';
+            document.getElementById('followupInput').value = '';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('crisisInput').focus();
+        }
+
+        function copyTurnText(btn) {
+            const turnDiv = btn.closest('.chat-turn-assistant');
+            if (!turnDiv) return;
+            const content = turnDiv.querySelector('.assistant-bubble-content');
+            if (!content) return;
+
+            navigator.clipboard.writeText(content.innerText).then(() => {
+                const origText = btn.innerHTML;
+                btn.innerHTML = '✓ Kopyalandı!';
+                btn.style.background = 'var(--gold-primary)';
+                btn.style.color = '#450a0a';
+                setTimeout(() => {
+                    btn.innerHTML = origText;
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }, 2000);
+            }).catch(() => {
+                alert("Metin kopyalanamadı.");
+            });
         }
 
         function formatLegalText(text) {
@@ -711,7 +1138,7 @@
             formatted = formatted.replace(/^\s*[\*\-]\s+/gm, '');
 
             // 4. Tek başına kalan sembol satırlarını (> *, *, - vb.) sil
-            formatted = formatted.replace(/^\s*[>*\-]+\s*$/gm, '');
+            formatted = formatted.replace(/^\s*[>\*\-]+\s*$/gm, '');
 
             // 5. Aşırı satır boşluklarını sadeleştir
             formatted = formatted.replace(/\n{3,}/g, '\n\n');
@@ -737,15 +1164,16 @@
             return formatted.trim();
         }
 
-        function copyResponse() {
-            const text = document.getElementById('responseContent').innerText;
-            if (!text) return;
-            navigator.clipboard.writeText(text).then(() => {
-                alert("Savunma metni ve dilekçeniz panoya başarıyla kopyalandı!");
-            }).catch(() => {
-                alert("Metin kopyalanamadı.");
-            });
-        }
+        // Ctrl+Enter / Cmd+Enter ile hızlı gönderme desteği
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                if (document.activeElement === document.getElementById('crisisInput')) {
+                    handleConsultation();
+                } else if (document.activeElement === document.getElementById('followupInput')) {
+                    handleFollowup();
+                }
+            }
+        });
     </script>
 
 </body>
