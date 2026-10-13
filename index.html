@@ -244,11 +244,11 @@
         }
 
         .card-label span {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 700;
             color: var(--gold-light);
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            text-transform: none;
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -962,13 +962,13 @@
         <!-- Soru Sorma Kartı (Başlangıç) -->
         <div class="crisis-card" id="initialCrisisCard">
             <div class="card-label">
-                <span>HAKKINIZI ARAYIN & BELGE YÜKLEYİN</span>
+                <span>Başına geleni yaz ve belgeni yükle</span>
             </div>
 
             <textarea 
                 id="crisisInput" 
                 class="crisis-textarea" 
-                placeholder="Örnek: Şu an polisler tarafından durduruldum, yazılı arama kararı göstermeden arabamı aramak istiyorlar. Memura tam olarak ne söylemeliyim? Veya aşağıdaki butondan tutanak/belge fotoğrafı yükleyin..."
+                placeholder="Örnek: Şu an polisler tarafından durduruldum, yazılı arama kararı göstermeden arabamı aramak istiyorlar. Memura tam olarak ne söylemeliyim? Veya aşağıdaki butondan tutanak ya da belge fotoğrafı yükle..."
             ></textarea>
 
             <!-- Belge Önizleme Alanı -->
@@ -990,7 +990,7 @@
                     <input type="file" id="fileInputInitial" style="display: none;" accept="image/*,application/pdf" onchange="handleFileSelect(event, 'initial')">
                     
                     <div class="ai-disclaimer-note">
-                        ℹ️ Tutanak, arama kararı veya iddianame fotoğrafı ekleyebilirsiniz.
+                        ℹ️ Tutanak, arama kararı veya iddianame fotoğrafı ekleyebilirsin.
                     </div>
                 </div>
 
