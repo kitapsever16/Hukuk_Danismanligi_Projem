@@ -18,6 +18,7 @@ ROLÜN VE KURALLARIN:
 10. Yanıtının en altına vatandaşın teyit edebilmesi için ilgili kanunun T.C. Mevzuat Bilgi Sistemi (mevzuat.gov.tr) doğrudan resmi bağlantısını kaynak olarak ekle.
 11. Metinlerinde asla '---', '***', '>*', '*' veya lüzumsuz işaretler kullanma. Başlıkları doğrudan '### 1. ADIM...' şeklinde yaz, maddeleri ve replikleri sade, temiz ve okunabilir bir Türkçe ile sun.
 12. Yanıtını ASLA yarıda bırakma veya kesme! Bütün adımları, tutanak şerhini, replikleri ve resmi mevzuat linkini sonuna kadar eksiksiz ve tam bir bütünlük içinde tamamla.
+13. ADLİ BELGE / TUTANAK / İDDİANAME İNCELEME KURALI: Vatandaş bir tutanak, arama kararı, yakalama belgesi, fezleke veya iddianame görseli/belgesi yüklediğinde; belgedeki suç isnatlarını, sevk maddelerini, tarihi, saati, mühür ve imza kısımlarını derinlemesine incele. CMK ve Anayasa yönünden bir usulsüzlük (hâkim kararı yokluğu, avukatsız ifade alma, gece vakti konut araması yasağı ihlali, soyut ihbarla keyfi arama vb.) varsa derhal ifşa et ve vatandaşa o belgeye karşı atması gereken adımları, tutanak şerhini veya hazır itiraz dilekçesini eksiksiz ver.
 `;
 
 module.exports = async function handler(req, res) {
@@ -56,13 +57,30 @@ module.exports = async function handler(req, res) {
             for (const item of body.messages) {
                 const role = (item.role === 'assistant' || item.role === 'model') ? 'model' : 'user';
                 const text = (item.content || item.text || '').trim();
-                if (!text) continue;
+                const attachment = item.attachment; // { mimeType, data }
+
+                const parts = [];
+                if (attachment && attachment.data) {
+                    parts.push({
+                        inlineData: {
+                            mimeType: attachment.mimeType || 'image/jpeg',
+                            data: attachment.data
+                        }
+                    });
+                }
+                if (text) {
+                    parts.push({ text });
+                } else if (parts.length > 0) {
+                    parts.push({ text: 'Lütfen ekteki adli belgeyi/tutanağı inceleyiniz ve haklarım konusunda adım adım yol haritası belirleyiniz.' });
+                }
+
+                if (parts.length === 0) continue;
 
                 // Gemini art arda ayni rolu kabul etmediginden pes pese gelenleri birlestir
                 if (contents.length > 0 && contents[contents.length - 1].role === role) {
-                    contents[contents.length - 1].parts[0].text += '\n\n' + text;
+                    contents[contents.length - 1].parts.push(...parts);
                 } else {
-                    contents.push({ role, parts: [{ text }] });
+                    contents.push({ role, parts });
                 }
             }
             // Ilk mesajin 'user' rolu olmasini garanti et
@@ -71,8 +89,24 @@ module.exports = async function handler(req, res) {
             }
         } else {
             const userMessage = (body && body.message ? body.message : '').trim();
+            const attachment = body && body.attachment;
+            const parts = [];
+            if (attachment && attachment.data) {
+                parts.push({
+                    inlineData: {
+                        mimeType: attachment.mimeType || 'image/jpeg',
+                        data: attachment.data
+                    }
+                });
+            }
             if (userMessage) {
-                contents = [{ role: 'user', parts: [{ text: userMessage }] }];
+                parts.push({ text: userMessage });
+            } else if (parts.length > 0) {
+                parts.push({ text: 'Lütfen ekteki adli belgeyi/tutanağı inceleyiniz ve haklarım konusunda adım adım yol haritası belirleyiniz.' });
+            }
+
+            if (parts.length > 0) {
+                contents = [{ role: 'user', parts }];
             }
         }
 
