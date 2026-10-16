@@ -2304,6 +2304,28 @@ Müşteki (Talep Eden)
             savePetitionDraft();
         }
 
+        function scrollPetitionEditorToTop() {
+            const textarea = document.getElementById('petitionEditorTextarea');
+            const editorContainer = document.querySelector('.pm-editor-container');
+            const modalDialog = document.querySelector('.petition-modal-dialog');
+
+            if (textarea) {
+                textarea.scrollTop = 0;
+                textarea.scrollLeft = 0;
+                if (typeof textarea.setSelectionRange === 'function') {
+                    try {
+                        textarea.setSelectionRange(0, 0);
+                    } catch (e) {}
+                }
+            }
+            if (editorContainer) {
+                editorContainer.scrollTop = 0;
+            }
+            if (modalDialog) {
+                modalDialog.scrollTop = 0;
+            }
+        }
+
         function resetToTurnOriginal() {
             if (!confirm('Hafızadaki düzenlemeleriniz sıfırlanıp bu yanıtın orijinal şablonuna dönülecek. Devam etmek istiyor musunuz?')) {
                 return;
@@ -2316,6 +2338,7 @@ Müşteki (Talep Eden)
             if (alertBox) alertBox.style.display = 'none';
 
             savePetitionDraft();
+            scrollPetitionEditorToTop();
         }
 
         function openPetitionEditorFromTurn(btn) {
@@ -2392,10 +2415,18 @@ Müşteki (Talep Eden)
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
 
+            scrollPetitionEditorToTop();
+
             setTimeout(() => {
-                textarea.focus();
-                textarea.setSelectionRange(0, 0);
-            }, 100);
+                if (textarea) {
+                    textarea.focus({ preventScroll: true });
+                }
+                scrollPetitionEditorToTop();
+            }, 60);
+
+            setTimeout(() => {
+                scrollPetitionEditorToTop();
+            }, 250);
         }
 
         function switchEditorTab(tab) {
@@ -2416,6 +2447,7 @@ Müşteki (Talep Eden)
                 formBar.style.display = 'none';
                 textarea.value = window.currentTurnFullText;
             }
+            scrollPetitionEditorToTop();
         }
 
         function applyUserInfoToPetition() {
@@ -2428,6 +2460,7 @@ Müşteki (Talep Eden)
             const date = document.getElementById('pmInputDate').value.trim();
 
             const textarea = document.getElementById('petitionEditorTextarea');
+            const prevScroll = textarea ? textarea.scrollTop : 0;
             let text = textarea.value;
 
             const nameVal = name || '[Adınız Soyadınız]';
@@ -2475,6 +2508,7 @@ Müşteki (Talep Eden)
 
             textarea.value = text;
             window.currentTurnPetitionText = text;
+            if (textarea) textarea.scrollTop = prevScroll;
             savePetitionDraft();
         }
 
