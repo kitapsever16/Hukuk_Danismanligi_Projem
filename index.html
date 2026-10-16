@@ -2201,6 +2201,87 @@ Müşteki (Talep Eden)
 (İmza)`;
         }
 
+        function cleanPetitionEnd(petitionPart) {
+            if (!petitionPart) return '';
+            let text = petitionPart.trim();
+
+            // 1. Bilinen tavsiye / rehber / adım / link / takip başlıklarını yakala
+            const endPatterns = [
+                /\n\s*(?:\d+[\.\)]\s*)?ADIM[\s:]/i,
+                /\n\s*(?:(?:\d+[\.\)]\s*)?(?:ADIM|AŞAMA|FAZ)|DİRENÇ|TAKİP\s+VE\s+DİRENÇ|DİRENÇ\s+VE\s+TAKİP|YOL\s+HARİTASI|ÖNEMLİ\s+TAVSİYE|ÖNEMLİ\s+NOT|NOT\s*:|TAVSİYELER|ÖNERİLER|UYARI|DİKKAT|SÜREÇ\s+TAKİBİ)/i,
+                /\n\s*(?:Arkadaşım|Yoldaşım|Dostum|Kardeşim|Yurttaşım)[,\s]/i,
+                /\n\s*(?:İlgili\s+(?:Kanun|Mevzuat)|Resmi\s+Kaynak|Resmî\s+Kaynak|T\.C\.\s+Mevzuat|Mevzuat\s+Bilgi\s+Sistemi)/i,
+                /\n\s*https?:\/\//i,
+                /\n\s*(?:Unutmayınız|Unutma|Asla\s+yalnız|Hakikat\s+ve\s+hukuk|Başını\s+dik|Yalnız\s+değilsin|Hukuk\s+Danışmanım|Şimdi\s+ne\s+yapacaksınız|Bundan\s+sonra)/i,
+                /\n\s*---+\s*\n/
+            ];
+
+            let earliestCutoff = -1;
+            for (const ep of endPatterns) {
+                const match = text.search(ep);
+                if (match !== -1 && match > 60) {
+                    if (earliestCutoff === -1 || match < earliestCutoff) {
+                        earliestCutoff = match;
+                    }
+                }
+            }
+
+            if (earliestCutoff !== -1) {
+                text = text.substring(0, earliestCutoff).trim();
+            }
+
+            // 2. İmza bloğundan sonra sızabilecek her türlü konuşma ve adımları kesin olarak kes
+            const imzaRegex = /\n[ \t]*\([İI]mza\)[ \t]*|\n[ \t]*[İI]mza[ \t]*(?:\n|$)/gi;
+            let lastImzaMatch = null;
+            let m;
+            while ((m = imzaRegex.exec(text)) !== null) {
+                lastImzaMatch = m;
+            }
+
+            if (lastImzaMatch) {
+                const afterImzaIndex = lastImzaMatch.index + lastImzaMatch[0].length;
+                const remainder = text.substring(afterImzaIndex);
+                
+                const lines = remainder.split('\n');
+                let validLines = [];
+                let inEkler = false;
+
+                for (let line of lines) {
+                    const tr = line.trim();
+                    if (!tr) {
+                        validLines.push(line);
+                        continue;
+                    }
+
+                    if (/^(?:EKLER|EK)\s*:/i.test(tr)) {
+                        inEkler = true;
+                        validLines.push(line);
+                        continue;
+                    }
+
+                    if (inEkler) {
+                        if (/^(?:\d+[\.\)]|-|\*)\s+.+/i.test(tr)) {
+                            validLines.push(line);
+                            continue;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    // İmza tamamlayıcıları: (Adı Soyadı), [Adınız Soyadınız], Tarih vs.
+                    if (/^(?:\([^\)]+\)|\[[^\]]+\]|Tarih\s*:.*|[A-ZÇĞİÖŞÜa-zçğıöşü\s]+(?:\(İmza\)|İmza)?)$/i.test(tr) && !/ADIM|DİRENÇ|TAVSİYE|TAKİP/i.test(tr)) {
+                        validLines.push(line);
+                    } else {
+                        break;
+                    }
+                }
+
+                text = text.substring(0, afterImzaIndex) + validLines.join('\n');
+            }
+
+            return text.trim();
+        }
+
         function extractPetitionText(rawText) {
             if (!rawText) return '';
             let text = rawText
@@ -2232,31 +2313,7 @@ Müşteki (Talep Eden)
 
             if (startIndex !== -1) {
                 let petitionPart = text.substring(startIndex).trim();
-                
-                // Kapanış, sohbet cümleleri ("Arkadaşım...", "Yoldaşım..."), mevzuat bağlantıları ve linkleri kesin olarak buda
-                const endPatterns = [
-                    /\n\s*(?:Arkadaşım|Yoldaşım|Dostum|Kardeşim|Yurttaşım)[,\s]/i,
-                    /\n\s*(?:İlgili\s+(?:Kanun|Mevzuat)|Resmi\s+Kaynak|Resmî\s+Kaynak|T\.C\.\s+Mevzuat|Mevzuat\s+Bilgi\s+Sistemi)/i,
-                    /\n\s*https?:\/\//i,
-                    /\n\s*(?:Unutmayınız|Unutma|Asla\s+yalnız|Hakikat\s+ve\s+hukuk|Başını\s+dik|Yalnız\s+değilsin|Hukuk\s+Danışmanım)/i,
-                    /\n\s*---+\s*\n/
-                ];
-
-                let earliestCutoff = -1;
-                for (const ep of endPatterns) {
-                    const match = petitionPart.search(ep);
-                    if (match !== -1 && match > 60) {
-                        if (earliestCutoff === -1 || match < earliestCutoff) {
-                            earliestCutoff = match;
-                        }
-                    }
-                }
-
-                if (earliestCutoff !== -1) {
-                    petitionPart = petitionPart.substring(0, earliestCutoff).trim();
-                }
-
-                return petitionPart;
+                return cleanPetitionEnd(petitionPart);
             }
 
             return '';
@@ -2380,9 +2437,10 @@ Müşteki (Talep Eden)
                 document.getElementById('pmInputOpponent').value = savedDraft.opponent || '';
                 document.getElementById('pmInputDate').value = savedDraft.date || getTodayFormattedDate();
 
-                // Kayıtlı metni yükle
-                textarea.value = savedDraft.text;
-                window.currentTurnPetitionText = savedDraft.text;
+                // Kayıtlı metni yükle (önceden hafızaya sızmış olabilecek tavsiye ve adım başlıklarını temizle)
+                const cleanedSavedText = cleanPetitionEnd(savedDraft.text);
+                textarea.value = cleanedSavedText;
+                window.currentTurnPetitionText = cleanedSavedText;
 
                 if (alertBox && alertText) {
                     const minutesAgo = Math.max(1, Math.round((Date.now() - savedDraft.savedAt) / 60000));
