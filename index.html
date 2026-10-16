@@ -1134,16 +1134,16 @@
             background: rgba(250, 204, 21, 0.12);
             border: 1px solid rgba(250, 204, 21, 0.35);
             color: #d1d5db;
-            padding: 6px 14px;
-            border-radius: 7px;
-            font-size: 12.5px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13.5px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: inherit;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 7px;
         }
 
         .pm-tab-btn:hover {
@@ -1159,17 +1159,62 @@
             box-shadow: 0 2px 10px rgba(250, 204, 21, 0.35);
         }
 
+        .pm-autosave-indicator {
+            font-size: 12.5px;
+            color: #86efac;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding-left: 6px;
+        }
+
+        .pm-draft-alert {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.18) 0%, rgba(20, 83, 45, 0.28) 100%);
+            border: 1px solid rgba(74, 222, 128, 0.45);
+            border-radius: 8px;
+            padding: 9px 18px;
+            margin: 10px 24px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            font-size: 13.5px;
+            color: #86efac;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .pm-draft-reset-btn {
+            background: rgba(239, 68, 68, 0.25);
+            border: 1px solid rgba(248, 113, 113, 0.5);
+            color: #fca5a5;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .pm-draft-reset-btn:hover {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
         .pm-form-bar {
-            padding: 12px 24px;
+            padding: 14px 24px;
             background: rgba(24, 6, 11, 0.98);
             border-bottom: 1px solid rgba(250, 204, 21, 0.25);
         }
 
         .pm-form-notice {
             color: #fef08a;
-            font-size: 11.5px;
+            font-size: 13px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -1178,7 +1223,7 @@
         .pm-inputs-grid {
             display: grid;
             grid-template-columns: 1.2fr 1fr 1.6fr 1.2fr 0.8fr auto;
-            gap: 10px;
+            gap: 12px;
             align-items: end;
         }
 
@@ -1186,18 +1231,18 @@
             background: linear-gradient(135deg, var(--gold-primary) 0%, #eab308 100%);
             border: 1px solid #fef08a;
             color: #450a0a;
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 800;
-            padding: 7px 16px;
-            border-radius: 6px;
+            padding: 8px 18px;
+            border-radius: 7px;
             cursor: pointer;
             transition: all 0.2s ease;
             white-space: nowrap;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
-            height: 35px;
+            gap: 6px;
+            height: 38px;
             box-shadow: 0 3px 10px rgba(250, 204, 21, 0.35);
             font-family: inherit;
         }
@@ -1211,12 +1256,12 @@
         .pm-input-group {
             display: flex;
             flex-direction: column;
-            gap: 3px;
+            gap: 4px;
         }
 
         .pm-input-group label {
             color: var(--gold-light);
-            font-size: 11px;
+            font-size: 12.5px;
             font-weight: 700;
             letter-spacing: 0.3px;
         }
@@ -1225,9 +1270,10 @@
             background: rgba(12, 3, 5, 0.88);
             border: 1px solid rgba(250, 204, 21, 0.35);
             color: #ffffff;
-            font-size: 12.5px;
-            padding: 7px 10px;
-            border-radius: 6px;
+            font-size: 13.5px;
+            padding: 8px 12px;
+            height: 38px;
+            border-radius: 7px;
             outline: none;
             transition: all 0.2s ease;
             font-family: inherit;
@@ -1237,7 +1283,7 @@
 
         .pm-input-group input:focus {
             border-color: var(--gold-primary);
-            box-shadow: 0 0 8px rgba(250, 204, 21, 0.4);
+            box-shadow: 0 0 10px rgba(250, 204, 21, 0.45);
             background: rgba(20, 4, 8, 0.95);
         }
 
@@ -1249,9 +1295,9 @@
         }
 
         .pm-btn {
-            padding: 8px 16px;
+            padding: 9px 18px;
             border-radius: 8px;
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 700;
             cursor: pointer;
             display: inline-flex;
@@ -1314,13 +1360,14 @@
 
         .pm-paper-textarea {
             width: 100%;
-            min-height: 480px;
+            min-height: 500px;
             background: #ffffff;
             color: #111827;
             font-family: 'Times New Roman', Times, serif;
-            font-size: 15px;
-            line-height: 1.6;
-            padding: 38px 44px;
+            font-size: 16px;
+            line-height: 1.7;
+            letter-spacing: 0.15px;
+            padding: 40px 48px;
             border: 1px solid #d1d5db;
             border-radius: 6px;
             box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
@@ -1336,7 +1383,7 @@
         }
 
         .pm-footer {
-            padding: 12px 24px;
+            padding: 14px 24px;
             background: rgba(30, 8, 13, 0.9);
             border-top: 1px solid rgba(250, 204, 21, 0.25);
             display: flex;
@@ -1348,7 +1395,7 @@
 
         .pm-footer-tip {
             color: #d1d5db;
-            font-size: 12px;
+            font-size: 13px;
             font-style: italic;
         }
 
@@ -1356,9 +1403,10 @@
             background: transparent;
             border: 1px solid rgba(250, 204, 21, 0.4);
             color: var(--gold-light);
-            padding: 6px 16px;
+            padding: 7px 18px;
             border-radius: 6px;
-            font-size: 12.5px;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: inherit;
@@ -1381,8 +1429,8 @@
             .pm-tab-btn {
                 flex: 1;
                 justify-content: center;
-                font-size: 11.5px;
-                padding: 6px 8px;
+                font-size: 12.5px;
+                padding: 8px 10px;
             }
             .pm-inputs-grid {
                 grid-template-columns: 1fr;
@@ -1393,12 +1441,12 @@
             .pm-btn {
                 flex: 1;
                 justify-content: center;
-                font-size: 12px;
-                padding: 8px 10px;
+                font-size: 13px;
+                padding: 9px 12px;
             }
             .pm-paper-textarea {
-                padding: 20px 16px;
-                font-size: 14px;
+                padding: 24px 18px;
+                font-size: 15px;
             }
             .petition-detected-banner {
                 flex-direction: column;
@@ -1611,6 +1659,7 @@
                     <button type="button" class="pm-tab-btn" id="tabFullTextBtn" onclick="switchEditorTab('full')">
                         📜 Tüm Tavsiye & Savunma Metni
                     </button>
+                    <span id="pmAutoSaveIndicator" class="pm-autosave-indicator">✓ Taslak kaydedildi</span>
                 </div>
                 <div class="pm-actions">
                     <button type="button" class="pm-btn pm-btn-copy" id="pmCopyBtn" onclick="copyPetitionEditorText()">
@@ -1623,6 +1672,12 @@
                         🖨️ PDF / Yazdır (A4)
                     </button>
                 </div>
+            </div>
+
+            <!-- Hafıza / Taslak Geri Yükleme Bildirim Şeridi -->
+            <div id="pmDraftRestoreAlert" class="pm-draft-alert" style="display: none;">
+                <div id="pmDraftAlertText">💾 <strong>Hafızadaki Taslağınız Yüklendi:</strong> Son düzenlemeniz korundu.</div>
+                <button type="button" class="pm-draft-reset-btn" onclick="resetToTurnOriginal()">🔄 Bu Yanıtın Orijinal Şablonuna Dön</button>
             </div>
 
             <!-- Kişiselleştirme Formu (Dilekçeye otomatik ve düzenli yerleşir) -->
@@ -1661,7 +1716,7 @@
 
             <div class="pm-editor-container">
                 <div class="pm-paper-wrapper">
-                    <textarea id="petitionEditorTextarea" class="pm-paper-textarea" spellcheck="false" placeholder="Dilekçe metni buraya yüklenecektir..." oninput="window.currentActiveTab==='petition' ? window.currentTurnPetitionText=this.value : window.currentTurnFullText=this.value"></textarea>
+                    <textarea id="petitionEditorTextarea" class="pm-paper-textarea" spellcheck="false" placeholder="Dilekçe metni buraya yüklenecektir..." oninput="handlePetitionEditorInput()"></textarea>
                 </div>
             </div>
 
@@ -2177,14 +2232,90 @@ Müşteki (Talep Eden)
 
             if (startIndex !== -1) {
                 let petitionPart = text.substring(startIndex).trim();
-                const endCutoff = petitionPart.search(/(?:T\.C\.\s+Mevzuat\s+Bilgi\s+Sistemi|https?:\/\/www\.mevzuat\.gov\.tr|Unutmayınız\s*yoldaşım|Asla\s*yalnız\s*değilsiniz)/i);
-                if (endCutoff !== -1 && endCutoff > 100) {
-                    petitionPart = petitionPart.substring(0, endCutoff).trim();
+                
+                // Kapanış, sohbet cümleleri ("Arkadaşım...", "Yoldaşım..."), mevzuat bağlantıları ve linkleri kesin olarak buda
+                const endPatterns = [
+                    /\n\s*(?:Arkadaşım|Yoldaşım|Dostum|Kardeşim|Yurttaşım)[,\s]/i,
+                    /\n\s*(?:İlgili\s+(?:Kanun|Mevzuat)|Resmi\s+Kaynak|Resmî\s+Kaynak|T\.C\.\s+Mevzuat|Mevzuat\s+Bilgi\s+Sistemi)/i,
+                    /\n\s*https?:\/\//i,
+                    /\n\s*(?:Unutmayınız|Unutma|Asla\s+yalnız|Hakikat\s+ve\s+hukuk|Başını\s+dik|Yalnız\s+değilsin|Hukuk\s+Danışmanım)/i,
+                    /\n\s*---+\s*\n/
+                ];
+
+                let earliestCutoff = -1;
+                for (const ep of endPatterns) {
+                    const match = petitionPart.search(ep);
+                    if (match !== -1 && match > 60) {
+                        if (earliestCutoff === -1 || match < earliestCutoff) {
+                            earliestCutoff = match;
+                        }
+                    }
                 }
+
+                if (earliestCutoff !== -1) {
+                    petitionPart = petitionPart.substring(0, earliestCutoff).trim();
+                }
+
                 return petitionPart;
             }
 
             return '';
+        }
+
+        let pmSaveTimer = null;
+        function savePetitionDraft() {
+            try {
+                const textarea = document.getElementById('petitionEditorTextarea');
+                if (!textarea) return;
+
+                const draft = {
+                    text: textarea.value,
+                    name: document.getElementById('pmInputName').value,
+                    tc: document.getElementById('pmInputTc').value,
+                    address: document.getElementById('pmInputAddress').value,
+                    opponent: document.getElementById('pmInputOpponent').value,
+                    date: document.getElementById('pmInputDate').value,
+                    activeTab: window.currentActiveTab || 'petition',
+                    savedAt: Date.now()
+                };
+
+                localStorage.setItem('hukuk_petition_draft_v1', JSON.stringify(draft));
+
+                const indicator = document.getElementById('pmAutoSaveIndicator');
+                if (indicator) {
+                    indicator.style.opacity = '1';
+                    clearTimeout(pmSaveTimer);
+                    pmSaveTimer = setTimeout(() => {
+                        indicator.style.opacity = '0';
+                    }, 1800);
+                }
+            } catch (err) {
+                console.warn('Taslak yerel hafızaya kaydedilemedi:', err);
+            }
+        }
+
+        function handlePetitionEditorInput() {
+            const val = document.getElementById('petitionEditorTextarea').value;
+            if (window.currentActiveTab === 'petition') {
+                window.currentTurnPetitionText = val;
+            } else {
+                window.currentTurnFullText = val;
+            }
+            savePetitionDraft();
+        }
+
+        function resetToTurnOriginal() {
+            if (!confirm('Hafızadaki düzenlemeleriniz sıfırlanıp bu yanıtın orijinal şablonuna dönülecek. Devam etmek istiyor musunuz?')) {
+                return;
+            }
+            const rawExtracted = extractPetitionText(window.currentTurnFullText) || getDefaultPetitionTemplate();
+            window.currentTurnPetitionText = rawExtracted;
+            document.getElementById('petitionEditorTextarea').value = rawExtracted;
+
+            const alertBox = document.getElementById('pmDraftRestoreAlert');
+            if (alertBox) alertBox.style.display = 'none';
+
+            savePetitionDraft();
         }
 
         function openPetitionEditorFromTurn(btn) {
@@ -2200,20 +2331,62 @@ Müşteki (Talep Eden)
             window.currentTurnPetitionText = petitionText;
             window.currentActiveTab = 'petition';
 
-            // Form alanlarını sıfırla
-            document.getElementById('pmInputName').value = '';
-            document.getElementById('pmInputTc').value = '';
-            document.getElementById('pmInputAddress').value = '';
-            document.getElementById('pmInputOpponent').value = '';
-            document.getElementById('pmInputDate').value = getTodayFormattedDate();
+            // Hafızada (localStorage) önceden düzenlenmiş taslak var mı kontrol et
+            let savedDraft = null;
+            try {
+                const item = localStorage.getItem('hukuk_petition_draft_v1');
+                if (item) {
+                    savedDraft = JSON.parse(item);
+                }
+            } catch (e) {
+                console.warn('Taslak okuma hatası:', e);
+            }
+
+            const alertBox = document.getElementById('pmDraftRestoreAlert');
+            const alertText = document.getElementById('pmDraftAlertText');
+            const textarea = document.getElementById('petitionEditorTextarea');
+
+            // 72 saatten yeni bir taslak varsa ve metin doluysa
+            const isRecentDraft = savedDraft && savedDraft.savedAt && (Date.now() - savedDraft.savedAt < 72 * 3600 * 1000);
+
+            if (isRecentDraft && savedDraft.text && savedDraft.text.trim()) {
+                // Form alanlarını doldur
+                document.getElementById('pmInputName').value = savedDraft.name || '';
+                document.getElementById('pmInputTc').value = savedDraft.tc || '';
+                document.getElementById('pmInputAddress').value = savedDraft.address || '';
+                document.getElementById('pmInputOpponent').value = savedDraft.opponent || '';
+                document.getElementById('pmInputDate').value = savedDraft.date || getTodayFormattedDate();
+
+                // Kayıtlı metni yükle
+                textarea.value = savedDraft.text;
+                window.currentTurnPetitionText = savedDraft.text;
+
+                if (alertBox && alertText) {
+                    const minutesAgo = Math.max(1, Math.round((Date.now() - savedDraft.savedAt) / 60000));
+                    const timeStr = minutesAgo < 60 ? `${minutesAgo} dakika önce` : `${Math.round(minutesAgo / 60)} saat önce`;
+                    alertText.innerHTML = `💾 <strong>Hafızadaki Taslağınız Yüklendi:</strong> Son düzenlemeniz (${timeStr}) korundu.`;
+                    alertBox.style.display = 'flex';
+                }
+            } else {
+                // Sıfırdan başlat
+                document.getElementById('pmInputName').value = '';
+                document.getElementById('pmInputTc').value = '';
+                document.getElementById('pmInputAddress').value = '';
+                document.getElementById('pmInputOpponent').value = '';
+                document.getElementById('pmInputDate').value = getTodayFormattedDate();
+
+                textarea.value = petitionText;
+
+                if (alertBox) {
+                    alertBox.style.display = 'none';
+                }
+                savePetitionDraft();
+            }
 
             // Sekmeleri güncelle
             document.getElementById('tabPetitionBtn').classList.add('active');
             document.getElementById('tabFullTextBtn').classList.remove('active');
             document.getElementById('pmFormBar').style.display = 'block';
-
-            const textarea = document.getElementById('petitionEditorTextarea');
-            textarea.value = petitionText;
 
             const modal = document.getElementById('petitionModal');
             modal.style.display = 'flex';
@@ -2302,6 +2475,7 @@ Müşteki (Talep Eden)
 
             textarea.value = text;
             window.currentTurnPetitionText = text;
+            savePetitionDraft();
         }
 
         function closePetitionModal() {
