@@ -2599,11 +2599,12 @@ Müşteki (Talep Eden)
         }
 
         function downloadEditorWord() {
-            const text = document.getElementById('petitionEditorTextarea').value;
+            let text = document.getElementById('petitionEditorTextarea').value;
             if (!text.trim()) {
                 alert('İndirilecek dilekçe metni bulunamadı.');
                 return;
             }
+            text = cleanPetitionEnd(text);
 
             const lines = text.split('\n');
             let htmlContent = '';
@@ -2691,17 +2692,14 @@ Müşteki (Talep Eden)
         }
 
         function printEditorPdf() {
-            const text = document.getElementById('petitionEditorTextarea').value;
+            let text = document.getElementById('petitionEditorTextarea').value;
             if (!text.trim()) {
                 alert('Yazdırılacak dilekçe metni bulunamadı.');
                 return;
             }
 
-            const printWindow = window.open('', '_blank');
-            if (!printWindow) {
-                alert('Lütfen yazdırma penceresine tarayıcınızdan izin veriniz.');
-                return;
-            }
+            // Metin içindeki muhtemel tavsiye veya adım artıklarını da son kez temizle
+            text = cleanPetitionEnd(text);
 
             const lines = text.split('\n');
             let htmlContent = '';
@@ -2736,7 +2734,27 @@ Müşteki (Talep Eden)
                 }
             }
 
-            printWindow.document.write(`
+            // Pop-up engelleyicilere takılmamak için doğrudan gizli iframe ile yazdır
+            let printIframe = document.getElementById('adliPrintIframe');
+            if (printIframe) {
+                printIframe.remove();
+            }
+
+            printIframe = document.createElement('iframe');
+            printIframe.id = 'adliPrintIframe';
+            printIframe.style.position = 'fixed';
+            printIframe.style.right = '0';
+            printIframe.style.bottom = '0';
+            printIframe.style.width = '0';
+            printIframe.style.height = '0';
+            printIframe.style.border = '0';
+            printIframe.style.zIndex = '-9999';
+            document.body.appendChild(printIframe);
+
+            const doc = printIframe.contentDocument || printIframe.contentWindow.document;
+
+            doc.open();
+            doc.write(`
                 <!DOCTYPE html>
                 <html lang="tr">
                 <head>
@@ -2801,16 +2819,19 @@ Müşteki (Talep Eden)
                     <div class="sheet">
                         ${htmlContent}
                     </div>
-                    <script>
-                        window.onload = function() {
-                            window.focus();
-                            window.print();
-                        };
-                    <\/script>
                 </body>
                 </html>
             `);
-            printWindow.document.close();
+            doc.close();
+
+            setTimeout(() => {
+                try {
+                    printIframe.contentWindow.focus();
+                    printIframe.contentWindow.print();
+                } catch (e) {
+                    console.error('Yazdırma hatası:', e);
+                }
+            }, 300);
         }
 
         // Ctrl+Enter / Cmd+Enter ile hızlı gönderme desteği
