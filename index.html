@@ -1124,38 +1124,95 @@
             flex-wrap: wrap;
         }
 
-        .pm-quick-inserts {
+        .pm-tabs {
             display: flex;
-            align-items: center;
-            gap: 6px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
-        .pqi-label {
-            color: var(--gold-light);
-            font-size: 12px;
-            font-weight: 700;
-            margin-right: 4px;
-        }
-
-        .pqi-btn {
+        .pm-tab-btn {
             background: rgba(250, 204, 21, 0.12);
             border: 1px solid rgba(250, 204, 21, 0.35);
-            color: #fef08a;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
+            color: #d1d5db;
+            padding: 6px 14px;
+            border-radius: 7px;
+            font-size: 12.5px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.18s ease;
+            transition: all 0.2s ease;
             font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .pqi-btn:hover {
-            background: var(--gold-primary);
+        .pm-tab-btn:hover {
+            color: #ffffff;
+            border-color: #facc15;
+            background: rgba(250, 204, 21, 0.2);
+        }
+
+        .pm-tab-btn.active {
+            background: linear-gradient(135deg, var(--gold-primary) 0%, #eab308 100%);
             color: #450a0a;
             border-color: #fef08a;
-            transform: translateY(-1px);
+            box-shadow: 0 2px 10px rgba(250, 204, 21, 0.35);
+        }
+
+        .pm-form-bar {
+            padding: 12px 24px;
+            background: rgba(24, 6, 11, 0.98);
+            border-bottom: 1px solid rgba(250, 204, 21, 0.25);
+        }
+
+        .pm-form-notice {
+            color: #fef08a;
+            font-size: 11.5px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pm-inputs-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1.6fr 1.2fr 0.8fr;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .pm-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .pm-input-group label {
+            color: var(--gold-light);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .pm-input-group input {
+            background: rgba(12, 3, 5, 0.88);
+            border: 1px solid rgba(250, 204, 21, 0.35);
+            color: #ffffff;
+            font-size: 12.5px;
+            padding: 7px 10px;
+            border-radius: 6px;
+            outline: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .pm-input-group input:focus {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 8px rgba(250, 204, 21, 0.4);
+            background: rgba(20, 4, 8, 0.95);
         }
 
         .pm-actions {
@@ -1291,6 +1348,18 @@
             .pm-toolbar {
                 flex-direction: column;
                 align-items: stretch;
+            }
+            .pm-tabs {
+                width: 100%;
+            }
+            .pm-tab-btn {
+                flex: 1;
+                justify-content: center;
+                font-size: 11.5px;
+                padding: 6px 8px;
+            }
+            .pm-inputs-grid {
+                grid-template-columns: 1fr;
             }
             .pm-actions {
                 justify-content: stretch;
@@ -1502,19 +1571,20 @@
             <div class="pm-header">
                 <div class="pm-title-box">
                     <div class="pm-badge">⚖️ T.C. ADLİ DİLEKÇE & RESMİ ÇIKTI MASASI</div>
-                    <div class="pm-subtitle">Dilekçenizi doğrudan düzenleyebilir; isim, T.C., tarih gibi kısımları tamamlayıp Word (.doc) veya PDF olarak resmi çıktısını alabilirsiniz.</div>
+                    <div class="pm-subtitle">Dilekçenizi doğrudan kâğıt üzerinde dilediğiniz gibi düzenleyebilir, kendi cümlelerinizi yazabilir; Word (.doc) veya PDF olarak resmi çıktısını alabilirsiniz.</div>
                 </div>
                 <button type="button" class="pm-close-btn" onclick="closePetitionModal()" title="Kapat">✕</button>
             </div>
 
+            <!-- Üst Araç Çubuğu ve Sekmeler -->
             <div class="pm-toolbar">
-                <div class="pm-quick-inserts">
-                    <span class="pqi-label">Hızlı Ekle:</span>
-                    <button type="button" class="pqi-btn" onclick="insertPlaceholder('[AD SOYAD]')">+ Ad Soyad</button>
-                    <button type="button" class="pqi-btn" onclick="insertPlaceholder('[T.C. KİMLİK NO: 12345678901]')">+ T.C. No</button>
-                    <button type="button" class="pqi-btn" onclick="insertTodayDate()">+ Bugünün Tarihi</button>
-                    <button type="button" class="pqi-btn" onclick="insertPlaceholder('[ADRES: ...]')">+ Adres</button>
-                    <button type="button" class="pqi-btn" onclick="insertPlaceholder('(İmza)')">+ İmza</button>
+                <div class="pm-tabs">
+                    <button type="button" class="pm-tab-btn active" id="tabPetitionBtn" onclick="switchEditorTab('petition')">
+                        📑 Resmi Dilekçe Şablonu
+                    </button>
+                    <button type="button" class="pm-tab-btn" id="tabFullTextBtn" onclick="switchEditorTab('full')">
+                        📜 Tüm Tavsiye & Savunma Metni
+                    </button>
                 </div>
                 <div class="pm-actions">
                     <button type="button" class="pm-btn pm-btn-copy" id="pmCopyBtn" onclick="copyPetitionEditorText()">
@@ -1529,14 +1599,43 @@
                 </div>
             </div>
 
+            <!-- Kişiselleştirme Formu (Dilekçeye otomatik ve düzenli yerleşir) -->
+            <div class="pm-form-bar" id="pmFormBar">
+                <div class="pm-form-notice">
+                    <span>⚡ Bilgilerinizi Yazınız (Dilekçenize Otomatik Yerleşir ve Cümlelerinizi Asla Silmez):</span>
+                </div>
+                <div class="pm-inputs-grid">
+                    <div class="pm-input-group">
+                        <label>Adınız Soyadınız:</label>
+                        <input type="text" id="pmInputName" placeholder="Örn: Ayşe Yılmaz" oninput="applyUserInfoToPetition()">
+                    </div>
+                    <div class="pm-input-group">
+                        <label>T.C. Kimlik No:</label>
+                        <input type="text" id="pmInputTc" placeholder="11 Haneli T.C. No" maxlength="11" oninput="applyUserInfoToPetition()">
+                    </div>
+                    <div class="pm-input-group">
+                        <label>Tebligat Adresiniz:</label>
+                        <input type="text" id="pmInputAddress" placeholder="İkametgah / Tebligat Adresiniz" oninput="applyUserInfoToPetition()">
+                    </div>
+                    <div class="pm-input-group">
+                        <label>Şüpheli / Karşı Taraf:</label>
+                        <input type="text" id="pmInputOpponent" placeholder="Şüpheli Şahıs veya Kurum" oninput="applyUserInfoToPetition()">
+                    </div>
+                    <div class="pm-input-group">
+                        <label>Tarih:</label>
+                        <input type="text" id="pmInputDate" oninput="applyUserInfoToPetition()">
+                    </div>
+                </div>
+            </div>
+
             <div class="pm-editor-container">
                 <div class="pm-paper-wrapper">
-                    <textarea id="petitionEditorTextarea" class="pm-paper-textarea" spellcheck="false" placeholder="Dilekçe metni buraya yüklenecektir..."></textarea>
+                    <textarea id="petitionEditorTextarea" class="pm-paper-textarea" spellcheck="false" placeholder="Dilekçe metni buraya yüklenecektir..." oninput="window.currentActiveTab==='petition' ? window.currentTurnPetitionText=this.value : window.currentTurnFullText=this.value"></textarea>
                 </div>
             </div>
 
             <div class="pm-footer">
-                <span class="pm-footer-tip">💡 İpucu: Resmi makamlara sunarken tarih ve imza atmayı, varsa delil ve kimlik fotokopinizi dilekçe ekine iliştirmeyi unutmayınız.</span>
+                <span class="pm-footer-tip">💡 İpucu: Kâğıt üzerindeki olay metnini ve cümleleri serbestçe değiştirebilir, silebilir ve kendi olayınızı ekleyebilirsiniz. Resmi makamlara sunarken tarih ve imza atmayı unutmayınız.</span>
                 <button type="button" class="pm-footer-close" onclick="closePetitionModal()">Kapat</button>
             </div>
         </div>
@@ -1963,6 +2062,14 @@
         // ----------------------------------------------------
         window.currentTurnFullText = '';
         window.currentTurnPetitionText = '';
+        window.currentActiveTab = 'petition';
+
+        function getTodayFormattedDate() {
+            const d = new Date();
+            return String(d.getDate()).padStart(2, '0') + '.' +
+                   String(d.getMonth() + 1).padStart(2, '0') + '.' +
+                   d.getFullYear();
+        }
 
         function hasPetition(rawText) {
             if (!rawText) return false;
@@ -1978,6 +2085,34 @@
                 if (upper.includes(kw)) matches++;
             }
             return matches >= 2;
+        }
+
+        function getDefaultPetitionTemplate() {
+            const today = getTodayFormattedDate();
+            return `CUMHURİYET BAŞSAVCILIĞINA / İLGİLİ MAHKEMEYE
+
+MÜŞTEKİ (TALEP EDEN): [Adınız Soyadınız] - T.C. No: [T.C. Kimlik No]
+ADRES: [Tebligat Adresiniz]
+
+ŞÜPHELİ (KARŞI TARAF): [Şüpheli Şahıs / Karşı Taraf / Kurum]
+
+KONU: Hukuka Aykırı Eylem ve İşlemler Hakkında Şikâyet ve Kamu Davası Açılması Talebidir.
+
+AÇIKLAMALAR:
+1. [Buraya maruz kaldığınız olayı, tarihi, saati ve polisin/karşı tarafın hukuka aykırı tutumunu kendi cümlelerinizle yazınız. Örneğin; ... tarihinde ... yerinde ...]
+2. [Varsa delillerinizi, tanıklarınızı, kamera veya ses kayıtlarınızı, darp raporunuzu ya da ilgili tutanağı buraya özetleyiniz.]
+
+HUKUKİ SEBEPLER: 5237 Sayılı TCK, 5271 Sayılı CMK, 2559 Sayılı PVSK, 6284 Sayılı Kanun ve T.C. Anayasası.
+
+HUKUKİ DELİLLER: Olay tutanakları, tanık beyanları, kamera görüntüleri, darp/adli tıp raporu ve her türlü yasal delil.
+
+SONUÇ VE İSTEM:
+Yukarıda arz ve izah edilen nedenlerle; şüpheli hakkında ivedilikle adli soruşturma başlatılarak kamu davası açılmasını ve yasal haklarımın korunmasını saygılarımla arz ve talep ederim.
+
+Tarih: ${today}
+Müşteki (Talep Eden)
+[Adınız Soyadınız]
+(İmza)`;
         }
 
         function extractPetitionText(rawText) {
@@ -2018,20 +2153,36 @@
                 return petitionPart;
             }
 
-            return text.trim();
+            return '';
         }
 
         function openPetitionEditorFromTurn(btn) {
             const turnDiv = btn.closest('.chat-turn-assistant');
             if (!turnDiv) return;
             const rawText = turnDiv.dataset.rawText || '';
-            const petitionText = extractPetitionText(rawText);
+            const extracted = extractPetitionText(rawText);
+
+            // Eğer yanıtta hazır bir dilekçe yoksa genel tavsiye yerine resmi adli çerçeve şablonu yükle
+            const petitionText = extracted || getDefaultPetitionTemplate();
 
             window.currentTurnFullText = rawText;
             window.currentTurnPetitionText = petitionText;
+            window.currentActiveTab = 'petition';
+
+            // Form alanlarını sıfırla
+            document.getElementById('pmInputName').value = '';
+            document.getElementById('pmInputTc').value = '';
+            document.getElementById('pmInputAddress').value = '';
+            document.getElementById('pmInputOpponent').value = '';
+            document.getElementById('pmInputDate').value = getTodayFormattedDate();
+
+            // Sekmeleri güncelle
+            document.getElementById('tabPetitionBtn').classList.add('active');
+            document.getElementById('tabFullTextBtn').classList.remove('active');
+            document.getElementById('pmFormBar').style.display = 'block';
 
             const textarea = document.getElementById('petitionEditorTextarea');
-            textarea.value = petitionText || rawText;
+            textarea.value = petitionText;
 
             const modal = document.getElementById('petitionModal');
             modal.style.display = 'flex';
@@ -2041,6 +2192,73 @@
                 textarea.focus();
                 textarea.setSelectionRange(0, 0);
             }, 100);
+        }
+
+        function switchEditorTab(tab) {
+            window.currentActiveTab = tab;
+            const textarea = document.getElementById('petitionEditorTextarea');
+            const formBar = document.getElementById('pmFormBar');
+            const tabPetBtn = document.getElementById('tabPetitionBtn');
+            const tabFullBtn = document.getElementById('tabFullTextBtn');
+
+            if (tab === 'petition') {
+                tabPetBtn.classList.add('active');
+                tabFullBtn.classList.remove('active');
+                formBar.style.display = 'block';
+                textarea.value = window.currentTurnPetitionText;
+            } else {
+                tabPetBtn.classList.remove('active');
+                tabFullBtn.classList.add('active');
+                formBar.style.display = 'none';
+                textarea.value = window.currentTurnFullText;
+            }
+        }
+
+        function applyUserInfoToPetition() {
+            if (window.currentActiveTab !== 'petition') return;
+
+            const name = document.getElementById('pmInputName').value.trim();
+            const tc = document.getElementById('pmInputTc').value.trim();
+            const address = document.getElementById('pmInputAddress').value.trim();
+            const opponent = document.getElementById('pmInputOpponent').value.trim();
+            const date = document.getElementById('pmInputDate').value.trim();
+
+            const textarea = document.getElementById('petitionEditorTextarea');
+            let text = textarea.value;
+
+            const nameVal = name || '[Adınız Soyadınız]';
+            const tcVal = tc || '[T.C. Kimlik No]';
+            const addrVal = address || '[Tebligat Adresiniz]';
+            const oppVal = opponent || '[Şüpheli Şahıs / Karşı Taraf / Kurum]';
+            const dateVal = date || getTodayFormattedDate();
+
+            // 1. Müşteki / Talep Eden satırı güncelle
+            if (/(?:TALEP EDEN|MÜŞTEKİ|ŞİKÂYETÇİ|BAŞVURAN)[^\n]*/i.test(text)) {
+                text = text.replace(/((?:TALEP EDEN|MÜŞTEKİ|ŞİKÂYETÇİ|BAŞVURAN)(?:\s*\([^)]*\))?)\s*:\s*[^\n]*/i, `$1: ${nameVal} - T.C. No: ${tcVal}`);
+            }
+
+            // 2. Adres satırı güncelle
+            if (/ADRES\s*:\s*[^\n]*/i.test(text)) {
+                text = text.replace(/ADRES\s*:\s*[^\n]*/i, `ADRES: ${addrVal}`);
+            }
+
+            // 3. Şüpheli / Karşı Taraf satırı güncelle
+            if (/(?:ŞÜPHELİ|KARŞI TARAF)[^\n]*/i.test(text)) {
+                text = text.replace(/((?:ŞÜPHELİ|KARŞI TARAF)(?:\s*\([^)]*\))?)\s*:\s*[^\n]*/i, `$1: ${oppVal}`);
+            }
+
+            // 4. Tarih satırı güncelle
+            if (/Tarih\s*:\s*[^\n]*/i.test(text)) {
+                text = text.replace(/Tarih\s*:\s*[^\n]*/i, `Tarih: ${dateVal}`);
+            }
+
+            // 5. İmza üstündeki isim alanını güncelle
+            if (/\(İmza\)/i.test(text)) {
+                text = text.replace(/(\n\s*(?:Müşteki|Talep Eden|Şikâyetçi)?[^\n]*\n\s*)[^\n]+(\s*\n\s*\(İmza\))/i, `$1${nameVal}$2`);
+            }
+
+            textarea.value = text;
+            window.currentTurnPetitionText = text;
         }
 
         function closePetitionModal() {
@@ -2053,24 +2271,6 @@
             if (event.target === document.getElementById('petitionModal')) {
                 closePetitionModal();
             }
-        }
-
-        function insertPlaceholder(tag) {
-            const textarea = document.getElementById('petitionEditorTextarea');
-            const start = textarea.selectionStart;
-            const end = textarea.selectionEnd;
-            const val = textarea.value;
-            textarea.value = val.substring(0, start) + tag + val.substring(end);
-            textarea.focus();
-            textarea.setSelectionRange(start + tag.length, start + tag.length);
-        }
-
-        function insertTodayDate() {
-            const d = new Date();
-            const dateStr = String(d.getDate()).padStart(2, '0') + '.' +
-                            String(d.getMonth() + 1).padStart(2, '0') + '.' +
-                            d.getFullYear();
-            insertPlaceholder(dateStr);
         }
 
         function copyPetitionEditorText() {
